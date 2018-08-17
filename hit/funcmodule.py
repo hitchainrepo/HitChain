@@ -1,3 +1,5 @@
-def my_function(text_to_display):
-    print('text from my_function :: {}'.format(text_to_display))
-
+# -- coding: utf-8 --
+def gitPushExchange(pathLocalRemoteRepo,args):
+    # TUDO:git push命令转换，将相关参数添加进命令中
+    pushCmd = ""
+    return pushCmd
