@@ -23,6 +23,7 @@ def main():
         # 获取远程仓库：ipfs get 远程地址
         print "hit get ipfs repo to local"
         ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash,pathLocalRemoteRepo) # 要重命名
+        print ipfsGetRepoCmd
         os.system(ipfsGetRepoCmd)
         # 将版本库提交到本地仓库
         print "hit push to local"
