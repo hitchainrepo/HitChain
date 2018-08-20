@@ -5,12 +5,12 @@ import random
 import string
 import time
 from .classmodule import RemoteRepo
-from .funcmodule import gitPushExchange
+from .funcmodule import *
 
 
 def main():
     args = sys.argv[1:]
-    print args
+    # print args
     if args[0] == 'push':
         projectLocation = os.getcwd()
         remoteRepo = RemoteRepo()
@@ -18,7 +18,7 @@ def main():
         remoteHash = remoteRepo.getRemoteHash()
         remoteUrl = remoteRepo.getRemoteUrl()
         # 远程仓库在本地的存放位置
-        pathLocalRemoteRepo = ''.join(random.sample(string.ascii_letters + string.digits, 32))
+        pathLocalRemoteRepo = genKey32()
         # 获取远程仓库：ipfs get 远程地址
         ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteUrl,pathLocalRemoteRepo) # 要重命名
         os.system(ipfsGetRepoCmd)
@@ -44,6 +44,32 @@ def main():
         # 删除本地的远程仓库
         os.chdir(projectLocation)
         os.system("rm -rf %s" % pathLocalRemoteRepo)
+
+    elif args[0] == "transfer":
+        if args[1][0:4] == "http":
+            repoName = args[1].split("/")[-1]
+            os.system("git clone --bare %s" % (args[1]))
+            projectLocation = os.getcwd()
+            os.chdir(repoName)
+            os.system("git update-server-info")
+            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            remoteHash = os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
+            namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
+            os.system(namePublishCmd)
+        elif len(args) == 1:
+            # 将本地的版本库上传
+            repoName = args[1].split("/")[-1]
+            # 改成将本地库改成bare库
+            # os.system("git clone --bare %s" % (args[1]))
+            projectLocation = os.getcwd()
+            os.chdir(repoName)
+            os.system("git update-server-info")
+            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            remoteHash = os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
+            namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
+            os.system(namePublishCmd)
+            return
+
 
     else:
         cmd = "git"
