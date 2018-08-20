@@ -17,6 +17,7 @@ def main():
         # 获取远程地址
         remoteHash = remoteRepo.getRemoteHash()
         remoteUrl = remoteRepo.getRemoteUrl()
+        remoteFileHash = remoteRepo.getRemoteFileHash()
         # 远程仓库在本地的存放位置
         pathLocalRemoteRepo = genKey32()
         # 获取远程仓库：ipfs get 远程地址
@@ -28,7 +29,7 @@ def main():
             gitPushCmd += " " + arg # 这里注意，如果用户添加了地址，这里没有去除
         os.system(gitPushCmd)
         # 获取远程仓库的时间戳remoteTimeStamp
-        remoteTimeStamp = "ipfs cat %s/timestamp" % remoteUrl
+        remoteTimeStamp = "ipfs cat %s/timestamp" % remoteFileHash
         if RemoteRepo.timeStamp == remoteTimeStamp:
             os.chdir(pathLocalRemoteRepo)
             # 在仓库中添加本地的时间戳

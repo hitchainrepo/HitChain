@@ -7,8 +7,12 @@ class RemoteRepo():
         if gitRemoteSplit[-2] == 'ipns':
             self.remoteUrl = gitRemote
             self.remoteHash = gitRemoteSplit[-1]
-            ipfsCatTimeStamp = "ipfs cat %s/timestamp" % (self.remoteUrl)
-            self.timeStamp = os.popen(ipfsCatTimeStamp).read()
+            remoteFileUrlList = os.popen("ipfs resolve /ipns/%s" % self.remoteHash).read().split("/")
+            if remoteFileUrlList[1] == "ipfs":
+                self.remoteFileHash = remoteFileUrlList[-2]
+                ipfsCatTimeStamp = "ipfs cat %s/timestamp" % (self.remoteFileHash)
+                self.timeStamp = os.popen(ipfsCatTimeStamp).read()
+
         else:
             self.remoteHash = ""
             self.timeStamp = ""
@@ -23,3 +27,6 @@ class RemoteRepo():
 
     def getTimeStamp(self):
         return self.timeStamp
+
+    def getRemoteFileHash(self):
+        return self.remoteFileHash
