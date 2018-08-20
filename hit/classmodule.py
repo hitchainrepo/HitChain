@@ -8,12 +8,14 @@ class RemoteRepo():
         if gitRemoteSplit[-2] == 'ipns':
             self.remoteUrl = gitRemote
             self.remoteHash = gitRemoteSplit[-1]
+            print gitRemoteSplit
             print "hit resolve ipns name"
             remoteFileUrlList = os.popen("ipfs resolve /ipns/%s" % self.remoteHash).read().split("/")
             if remoteFileUrlList[1] == "ipfs":
                 self.remoteFileHash = remoteFileUrlList[-1]
                 print "hit get ipfs file key"
                 ipfsCatTimeStamp = "ipfs cat %s/timestamp" % (self.remoteFileHash)
+                print ipfsCatTimeStamp
                 self.timeStamp = os.popen(ipfsCatTimeStamp).read()
 
         else:
