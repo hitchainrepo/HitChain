@@ -37,6 +37,7 @@ def main():
         if remoteRepo.timeStamp == remoteTimeStamp:
             os.chdir(pathLocalRemoteRepo)
             # 在仓库中添加本地的时间戳
+            os.system("git update-server-info")
             os.system("echo " + repr(time.time()) + " > timestamp") # 生成一个时间戳文件
             # 将合并后的代码仓库提交到ipfs网络中: ipfs add -r
             print "add repo to ipfs network"
