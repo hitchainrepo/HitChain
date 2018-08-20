@@ -1,2 +1,2 @@
-from .funcmodule import my_function
+from .funcmodule import *
 
