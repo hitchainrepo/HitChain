@@ -52,10 +52,12 @@ def main():
             projectLocation = os.getcwd()
             os.chdir(repoName)
             os.system("git update-server-info")
+            os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
             newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
             remoteHash = os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
-            namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
+            namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
             os.system(namePublishCmd)
+            os.system("rm -rf %s/%s" % (projectLocation, repoName))
         elif len(args) == 1:
             # 将本地的版本库上传
             repoName = args[1].split("/")[-1]
