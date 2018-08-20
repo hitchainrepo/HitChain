@@ -30,7 +30,7 @@ def main():
         os.system(gitPushCmd)
         # 获取远程仓库的时间戳remoteTimeStamp
         remoteTimeStamp = "ipfs cat %s/timestamp" % remoteFileHash
-        if RemoteRepo.timeStamp == remoteTimeStamp:
+        if remoteRepo.timeStamp == remoteTimeStamp:
             os.chdir(pathLocalRemoteRepo)
             # 在仓库中添加本地的时间戳
             os.system("echo " + repr(time.time()) + " > timestamp") # 生成一个时间戳文件
