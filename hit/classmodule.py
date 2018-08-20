@@ -11,7 +11,7 @@ class RemoteRepo():
             print "hit resolve ipns name"
             remoteFileUrlList = os.popen("ipfs resolve /ipns/%s" % self.remoteHash).read().split("/")
             if remoteFileUrlList[1] == "ipfs":
-                self.remoteFileHash = remoteFileUrlList[-2]
+                self.remoteFileHash = remoteFileUrlList[-1]
                 print "hit get ipfs file key"
                 ipfsCatTimeStamp = "ipfs cat %s/timestamp" % (self.remoteFileHash)
                 self.timeStamp = os.popen(ipfsCatTimeStamp).read()
