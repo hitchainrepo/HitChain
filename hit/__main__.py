@@ -21,22 +21,27 @@ def main():
         # 远程仓库在本地的存放位置
         pathLocalRemoteRepo = genKey32()
         # 获取远程仓库：ipfs get 远程地址
-        ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteUrl,pathLocalRemoteRepo) # 要重命名
+        print "hit get ipfs repo to local"
+        ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash,pathLocalRemoteRepo) # 要重命名
         os.system(ipfsGetRepoCmd)
         # 将版本库提交到本地仓库
+        print "hit push to local"
         gitPushCmd = "git push %s" % (pathLocalRemoteRepo)
         for arg in args[1:]:
             gitPushCmd += " " + arg # 这里注意，如果用户添加了地址，这里没有去除
         os.system(gitPushCmd)
         # 获取远程仓库的时间戳remoteTimeStamp
-        remoteTimeStamp = "ipfs cat %s/timestamp" % remoteFileHash
+        print "compare local repo with remote repo"
+        remoteTimeStamp = os.popen("ipfs cat %s/timestamp" % remoteFileHash).read()
         if remoteRepo.timeStamp == remoteTimeStamp:
             os.chdir(pathLocalRemoteRepo)
             # 在仓库中添加本地的时间戳
             os.system("echo " + repr(time.time()) + " > timestamp") # 生成一个时间戳文件
             # 将合并后的代码仓库提交到ipfs网络中: ipfs add -r
+            print "add repo to ipfs network"
             newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
             # 获取新提交的仓库rootFileUrl，并将其命名到名字空间中
+            print "publish file to ipns"
             namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
             os.system(namePublishCmd)
         else:
