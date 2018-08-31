@@ -43,7 +43,7 @@ def main():
             print "add repo to ipfs network"
             newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
             # 获取新提交的仓库rootFileUrl，并将其命名到名字空间中
-            print "publish file to ipns"
+            print "publish file to ipns %s" % remoteHash
             namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
             os.system(namePublishCmd)
         else:
