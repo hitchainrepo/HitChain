@@ -21,3 +21,18 @@ def genKey32():
     import random
     import string
     return ''.join(random.sample(string.ascii_letters + string.digits, 32))
+
+def mkdir(path):
+    import os
+    path=path.strip()
+    path=path.rstrip("\\")
+    isExists=os.path.exists(path)
+
+    if not isExists:
+        print path+': create successfull'
+        os.makedirs(path)
+        return True
+    else:
+        print path+': path already exist'
+        return False
+
