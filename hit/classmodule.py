@@ -80,14 +80,6 @@ class AccessControl():
             f.close()
             return binascii.b2a_hex(data)
 
-    def savePublicKeyOfIpns(self,ipnsKey):
-        import binascii
-        dataTurn = binascii.a2b_hex(ipnsKey)
-        with open(self.ipfsKeyPath+self.keyName,'wb') as f:
-            f.write(dataTurn)
-            f.close()
-            print "You have get the key for publish ipns."
-
     def createUserKey(self,userKeyName):
         import os
         if os.access(self.filePath+userKeyName+'.public.pem',os.F_OK) and os.access(self.filePath+userKeyName+'.private.pem',os.F_OK):
@@ -105,13 +97,17 @@ class AccessControl():
                 f.close()
 
     def getUserKey(self,userKeyName):
-        import rsa
-        with open(self.filePath+userKeyName+'.public.pem', 'r') as f:
-            self.pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
-            f.close()
-        with open(self.filePath+userKeyName+'.private.pem', 'r') as f:
-            self.privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
-            f.close()
+        import os
+        if os.access(self.filePath+userKeyName+'.public.pem',os.F_OK) and os.access(self.filePath+userKeyName+'.private.pem',os.F_OK):
+            import rsa
+            with open(self.filePath+userKeyName+'.public.pem', 'r') as f:
+                self.pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
+                f.close()
+            with open(self.filePath+userKeyName+'.private.pem', 'r') as f:
+                self.privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
+                f.close()
+        else:
+            print "You don't have a key named %s" % userKeyName
 
     @staticmethod
     def encrypt(message,pubkey):
@@ -217,6 +213,14 @@ class AccessControl():
         #     print "You don't have authority to do this!!!"
 
         return publicKeyOfIPNS
+
+    def savePublicKeyOfIpns(self,ipnsKey):
+        import binascii
+        dataTurn = binascii.a2b_hex(ipnsKey)
+        with open(self.ipfsKeyPath+self.keyName,'wb') as f:
+            f.write(dataTurn)
+            f.close()
+            print "You have get the key for publish ipns."
 
     def deleteIPNSKey(self):
         import os

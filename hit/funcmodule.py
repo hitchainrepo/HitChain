@@ -37,7 +37,7 @@ def mkdir(path):
         return False
 
 def readPublicKey(keyPath):
-    with open(keyPath, 'w+') as f:
+    with open(keyPath, 'r') as f:
         import rsa
         pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
         f.close()
