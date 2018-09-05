@@ -36,3 +36,11 @@ def mkdir(path):
         print path+': path already exist'
         return False
 
+def readPublicKey(keyPath):
+    with open(keyPath, 'w+') as f:
+        import rsa
+        pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
+        f.close()
+    return pubkey
+
+

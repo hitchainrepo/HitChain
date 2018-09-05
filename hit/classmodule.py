@@ -38,44 +38,61 @@ class RemoteRepo():
 
 class AccessControl():
     def __init__(self,pathhash):
-        self.filePath = "~/.hit/"
-        from .funcmodule import mkdir
+        import os
+        self.projPath = os.getcwd()+'/'
+        self.systemPath = os.path.expanduser('~')+'/'
+        self.filePath = self.systemPath + ".hit/"
+        from funcmodule import mkdir
         mkdir(self.filePath)
-        self.ipfsKeyPath = "~/.ipfs/keystore"
+        self.ipfsKeyPath = self.systemPath + ".ipfs/keystore/"
         self.pathhash = pathhash
 
     def setKeyName(self,keyName):
         self.keyName = keyName
 
-    def initKeyNameFromJson(self):
+    def setKeyNameFromJson(self):
         import json
-        with open(self.keyName, 'r', encoding='utf-8') as f:
+        with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
         self.keyName = jsonDict["keyName"]
 
     def initJson(self):
         import json
+        import binascii
+        import aes
         self.createUserKey("self")
         publicKeyIpns = self.getPublicKeyOfIPNS()
+        aeskey = aes.keyGen()
+        aesClass = aes.AESCipher(aeskey)
         jsonDict = {"keyName":self.keyName,
                 "auth":[{'userKey':self.pubkey.save_pkcs1().decode(),
-                         "publicKey":self.encrypt(publicKeyIpns,self.pubkey)}]}
-        with open(self.pathhash, 'w', encoding='utf-8') as fout:
+                         "publicKey":binascii.b2a_hex(aesClass.encrypt(publicKeyIpns)),
+                         "AESKey":binascii.b2a_hex(self.encrypt(binascii.b2a_hex(aeskey),self.pubkey))}]}
+        with open(self.pathhash, 'w') as fout:
             fout.writelines(json.dumps(jsonDict))
             fout.close()
 
     def getPublicKeyOfIPNS(self):
         import binascii
-        f = open(self.ipfsKeyPath+self.keyName, "rb+")
-        data = f.read()
-        f.close()
-        return binascii.b2a_hex(data)
+        with open(self.ipfsKeyPath+self.keyName, "rb+") as f:
+            data = f.read()
+            f.close()
+            return binascii.b2a_hex(data)
+
+    def savePublicKeyOfIpns(self,ipnsKey):
+        import binascii
+        dataTurn = binascii.a2b_hex(ipnsKey)
+        with open(self.ipfsKeyPath+self.keyName,'wb') as f:
+            f.write(dataTurn)
+            f.close()
+            print "You have get the key for publish ipns."
 
     def createUserKey(self,userKeyName):
         import os
         if os.access(self.filePath+userKeyName+'.public.pem',os.F_OK) and os.access(self.filePath+userKeyName+'.private.pem',os.F_OK):
             print "The key already exists"
+            self.getUserKey(userKeyName)
         else:
             import rsa
             (self.pubkey, self.privkey) = rsa.newkeys(1024)
@@ -89,11 +106,10 @@ class AccessControl():
 
     def getUserKey(self,userKeyName):
         import rsa
-        filePath = "~/.hit/"
-        with open(filePath+userKeyName+'public.pem', 'r') as f:
+        with open(self.filePath+userKeyName+'.public.pem', 'r') as f:
             self.pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
             f.close()
-        with open(filePath+userKeyName+'private.pem', 'r') as f:
+        with open(self.filePath+userKeyName+'.private.pem', 'r') as f:
             self.privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
             f.close()
 
@@ -119,36 +135,43 @@ class AccessControl():
 
     def addAdmin(self,userPublicKey):
         import json
-        with open(self.keyName, 'r', encoding='utf-8') as f:
+        with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
-        publicKeyIpns = self.getPublicKeyOfIPNS()
+        # publicKeyIpns = self.getPublicKeyOfIPNS()
         authFlag = self.verifiAuth(self.pubkey)
         if authFlag:
             if self.verifiAuth(userPublicKey):
                 print "The user is already in the list."
             else:
+                import binascii
+                import aes
+                aeskey = aes.keyGen()
+                aesClass = aes.AESCipher(aeskey)
+                publicKeyIpns = self.getPublicKeyFromJson()
                 jsonDict["auth"].append({'userKey':userPublicKey.save_pkcs1().decode(),
-                                         "publicKey":self.encrypt(publicKeyIpns,userPublicKey)})
-                with open(self.keyName, 'w', encoding='utf-8') as fout:
+                                         "publicKey":binascii.b2a_hex(aesClass.encrypt(publicKeyIpns)),
+                                         "AESKey":binascii.b2a_hex(self.encrypt(binascii.b2a_hex(aeskey),userPublicKey))})
+                with open(self.pathhash, 'w') as fout:
                     fout.writelines(json.dumps(jsonDict))
                     fout.close()
                 print "The user have been added."
         else:
             print "You don't have authority to do this!!!"
 
-    def deleAdmin(self,userPublicKey):
+    def deleteAdmin(self,userPublicKey):
         import json
-        with open(self.keyName, 'r', encoding='utf-8') as f:
+        with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
-        publicKeyIpns = self.getPublicKeyOfIPNS()
         authFlag = self.verifiAuth(self.pubkey)
         if authFlag:
             if self.verifiAuth(userPublicKey):
-                jsonDict["auth"].remove({'userKey': userPublicKey.save_pkcs1().decode(),
-                                         "publicKey": self.encrypt(publicKeyIpns, userPublicKey)})
-                with open(self.keyName, 'w', encoding='utf-8') as fout:
+                for auth in jsonDict['auth']:
+                    if auth["userKey"] == userPublicKey.save_pkcs1().decode():
+                        jsonDict["auth"].remove(auth)
+                        break
+                with open(self.pathhash, 'w') as fout:
                     fout.writelines(json.dumps(jsonDict))
                     fout.close()
                 print "The user have been deleted."
@@ -159,7 +182,7 @@ class AccessControl():
 
     def verifiAuth(self,userPublicKey):
         import json
-        with open(self.keyName, 'r', encoding='utf-8') as f:
+        with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
         authFlag = False
@@ -171,27 +194,30 @@ class AccessControl():
 
     def getPublicKeyFromJson(self):
         import json
-        with open(self.keyName, 'r', encoding='utf-8') as f:
+        import binascii
+        with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
-        authFlag = False
+        publicKeyOfIPNS = ''
+
         for userAuth in jsonDict["auth"]:
             if userAuth["userKey"] == self.pubkey.save_pkcs1().decode():
-                publicKeyOfIPNS = self.decrypt(userAuth["publicKey"],self.privkey)
-                authFlag = True
+                import aes
+                aeskey = binascii.a2b_hex(self.decrypt(binascii.a2b_hex(userAuth["AESKey"]),self.privkey))
+                aesClass = aes.AESCipher(aeskey)
+                publicKeyOfIPNS = aesClass.decrypt(binascii.a2b_hex(userAuth["publicKey"]))
                 break
-        if authFlag:
-            import binascii
-            dataTurn = binascii.a2b_hex(publicKeyOfIPNS)
-            filePath = self.keyName
-            binfile = open(filePath,'wb')
-            binfile.write(dataTurn)
-            print "You have generate the key for publish ipns."
-        else:
-            print "You don't have authority to do this!!!"
+        # if authFlag:
+        #     dataTurn = binascii.a2b_hex(publicKeyOfIPNS)
+        #     filePath = self.keyName
+        #     binfile = open(filePath,'wb')
+        #     binfile.write(dataTurn)
+        #     print "You have generate the key for publish ipns."
+        # else:
+        #     print "You don't have authority to do this!!!"
 
-        return authFlag
-    
+        return publicKeyOfIPNS
+
     def deleteIPNSKey(self):
         import os
         cmd = "ipfs key rm %s" % self.keyName
