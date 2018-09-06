@@ -1,8 +1,8 @@
 # -- coding: utf-8 --
 import sys
 import os
-import random
-import string
+# import random
+# import string
 import time
 from .classmodule import RemoteRepo, AccessControl
 from .funcmodule import *
@@ -16,7 +16,7 @@ def main():
         remoteRepo = RemoteRepo()
         # 获取远程地址
         remoteHash = remoteRepo.getRemoteHash()
-        remoteUrl = remoteRepo.getRemoteUrl()
+        # remoteUrl = remoteRepo.getRemoteUrl()
         remoteFileHash = remoteRepo.getRemoteFileHash()
 
         # 获取权限文件
@@ -76,6 +76,7 @@ def main():
             os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
 
             newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
             namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
             remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
 
