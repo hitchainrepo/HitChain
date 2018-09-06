@@ -58,12 +58,12 @@ def main():
                 accessControl.deleteIPNSKey()
             else:
                 print "Err: The remote repo has been updated by other user, please push the repo again."
-
             # 删除本地的远程仓库
             os.chdir(projectLocation)
             os.system("rm -rf %s" % pathLocalRemoteRepo)
         else:
             print "ERROR: You don't have permission to push your code to the repo"
+        os.system("rm %s" % remoteHash)
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
@@ -108,7 +108,7 @@ def main():
     # elif args[0:2] == ['gen', 'userKey']:
 
     # 添加管理员
-    elif args[0] == ['add-user']:
+    elif args[0] == 'add-user':
         if len(args) == 2:
             if os.access(args[1], os.F_OK):
                 projectLocation = os.getcwd()
@@ -150,7 +150,7 @@ def main():
     #       不是->返回，删除权限文件
 
     # 删除管理员
-    elif args[0] == ['delete-user']:
+    elif args[0] == 'delete-user':
         if len(args) == 2:
             if os.access(args[1], os.F_OK):
                 projectLocation = os.getcwd()
