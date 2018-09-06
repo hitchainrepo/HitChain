@@ -59,16 +59,15 @@ class AccessControl():
 
     def initJson(self):
         import json
-        import binascii
-        import aes
+        import des
         self.createUserKey("self")
         publicKeyIpns = self.getPublicKeyOfIPNS()
-        aeskey = aes.keyGen()
-        aesClass = aes.AESCipher(aeskey)
+        deskey = des.keyGen()
+        desClass = des.DESCipher(deskey)
         jsonDict = {"keyName":self.keyName,
                 "auth":[{'userKey':self.pubkey.save_pkcs1().decode(),
-                         "publicKey":binascii.b2a_hex(aesClass.encrypt(publicKeyIpns)),
-                         "AESKey":binascii.b2a_hex(self.encrypt(binascii.b2a_hex(aeskey),self.pubkey))}]}
+                         "publicKey":desClass.des_encrypt(publicKeyIpns),
+                         "DESKey":self.encrypt(deskey,self.pubkey)}]}
         with open(self.pathhash, 'w') as fout:
             fout.writelines(json.dumps(jsonDict))
             fout.close()
@@ -112,22 +111,24 @@ class AccessControl():
     @staticmethod
     def encrypt(message,pubkey):
         import rsa
-        return rsa.encrypt(message.encode(), pubkey)
+        import binascii
+        return binascii.b2a_hex(rsa.encrypt(message.encode(), pubkey))
 
     @staticmethod
     def decrypt(crypto,privkey):
         import rsa
-        return rsa.decrypt(crypto, privkey).decode()
+        import binascii
+        return rsa.decrypt(binascii.a2b_hex(crypto), privkey).decode()
 
-    @staticmethod
-    def sign(message,privkey):
-        import rsa
-        return rsa.sign(message.encode(), privkey, 'SHA-1')
-
-    @staticmethod
-    def verify(message,signature,pubkey):
-        import rsa
-        return rsa.verify(message.encode(), signature, pubkey)
+    # @staticmethod
+    # def sign(message,privkey):
+    #     import rsa
+    #     return rsa.sign(message.encode(), privkey, 'SHA-1')
+    #
+    # @staticmethod
+    # def verify(message,signature,pubkey):
+    #     import rsa
+    #     return rsa.verify(message.encode(), signature, pubkey)
 
     def addAdmin(self,userPublicKey):
         import json
@@ -140,18 +141,17 @@ class AccessControl():
             if self.verifiAuth(userPublicKey):
                 print "The user is already in the list."
             else:
-                import binascii
-                import aes
-                aeskey = aes.keyGen()
-                aesClass = aes.AESCipher(aeskey)
+                import des
+                deskey = des.keyGen()
+                desClass = des.DESCipher(deskey)
                 publicKeyIpns = self.getPublicKeyFromJson()
                 jsonDict["auth"].append({'userKey':userPublicKey.save_pkcs1().decode(),
-                                         "publicKey":binascii.b2a_hex(aesClass.encrypt(publicKeyIpns)),
-                                         "AESKey":binascii.b2a_hex(self.encrypt(binascii.b2a_hex(aeskey),userPublicKey))})
+                                         "publicKey":desClass.des_encrypt(publicKeyIpns),
+                                         "DESKey":self.encrypt(deskey,userPublicKey)})
                 with open(self.pathhash, 'w') as fout:
                     fout.writelines(json.dumps(jsonDict))
                     fout.close()
-                print "The user have been added."
+                print "The user has been added."
         else:
             print "You don't have authority to do this!!!"
 
@@ -190,7 +190,7 @@ class AccessControl():
 
     def getPublicKeyFromJson(self):
         import json
-        import binascii
+        # import binascii
         with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
             f.close()
@@ -198,10 +198,10 @@ class AccessControl():
 
         for userAuth in jsonDict["auth"]:
             if userAuth["userKey"] == self.pubkey.save_pkcs1().decode():
-                import aes
-                aeskey = binascii.a2b_hex(self.decrypt(binascii.a2b_hex(userAuth["AESKey"]),self.privkey))
-                aesClass = aes.AESCipher(aeskey)
-                publicKeyOfIPNS = aesClass.decrypt(binascii.a2b_hex(userAuth["publicKey"]))
+                import des
+                deskey = self.decrypt(userAuth["DESKey"],self.privkey)
+                desClass = des.DESCipher(str(deskey))
+                publicKeyOfIPNS = desClass.des_descrypt(userAuth["publicKey"])
                 break
         # if authFlag:
         #     dataTurn = binascii.a2b_hex(publicKeyOfIPNS)
@@ -229,6 +229,6 @@ class AccessControl():
 
     def deleteUserKey(self,userKeyName):
         import os
-        os.syste("rm "+ self.filePath + userKeyName + '.public.pem')
-        os.syste("rm "+ self.filePath + userKeyName + '.private.pem')
+        os.system("rm "+ self.filePath + userKeyName + '.public.pem')
+        os.system("rm "+ self.filePath + userKeyName + '.private.pem')
 
