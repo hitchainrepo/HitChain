@@ -44,7 +44,6 @@ func checkFileIsExist(filename string) bool {
 }
 // add by Nigel end
 
-
 func init() {
 	// setting here instead of in literal to prevent initialization loop
 	// (some commands make references to Root)
