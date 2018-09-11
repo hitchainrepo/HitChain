@@ -56,7 +56,17 @@ func init() {
 	// write a server ip to a local file
 	var clientFilePath = "./serverIp.txt"
 	if checkFileIsExist(clientFilePath) {
-		f, err1 = os.OpenFile(clientFilePath, os.O_APPEND, 0666) //打开文件
+		err := os.Remove(clientFilePath)               //删除文件
+		if err != nil {
+			//如果删除失败则输出 file remove Error!
+			fmt.Println("file remove Error!")
+			//输出错误详细信息
+			fmt.Printf("%s", err)
+		} else {
+			//如果删除成功则输出 file remove OK!
+			fmt.Print("file remove OK!")
+		}
+		f, err1 = os.OpenFile(clientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
 		fmt.Println("文件存在")
 	} else {
 		f, err1 = os.Create(clientFilePath)
