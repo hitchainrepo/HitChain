@@ -5,22 +5,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ipfs/go-ipfs/core/commands"
 	"io"
 	"os"
 	"path"
 	"strings"
 
-	assets "github.com/ipfs/go-ipfs/assets"
+	"github.com/ipfs/go-ipfs/assets"
 	oldcmds "github.com/ipfs/go-ipfs/commands"
-	core "github.com/ipfs/go-ipfs/core"
-	namesys "github.com/ipfs/go-ipfs/namesys"
-	fsrepo "github.com/ipfs/go-ipfs/repo/fsrepo"
+	"github.com/ipfs/go-ipfs/core"
+	"github.com/ipfs/go-ipfs/namesys"
+	"github.com/ipfs/go-ipfs/repo/fsrepo"
 
 	"gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds"
 	"gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit"
 	"gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config"
-
-	commands "github.com/ipfs/go-ipfs/core/commands"
 )
 
 const (
@@ -147,26 +146,6 @@ func checkFileIsExist(filename string) bool {
 
 func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, confProfiles []string, conf *config.Config) error {
 
-	// add by Nigel start: write a file
-	var f *os.File
-	var err1 error
-	// write a server ip to a local file
-	if checkFileIsExist(commands.ClientFilePath) {
-		err := os.Remove(commands.ClientFilePath)
-		check(err)
-		f, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
-		fmt.Println("文件存在")
-	} else {
-		f, err1 = os.Create(commands.ClientFilePath)
-		fmt.Println("文件不存在")
-	}
-	check(err1)
-	n, err1 := io.WriteString(f, "47.105.76.115")
-	check(err1)
-	_ = n
-	//fmt.Println("hello world")
-	// add by Nigel end
-
 	if _, err := fmt.Fprintf(out, "initializing IPFS node at %s\n", repoRoot); err != nil {
 		return err
 	}
@@ -207,6 +186,27 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 			return err
 		}
 	}
+
+
+	// add by Nigel start: write a file
+	var f *os.File
+	var err1 error
+	// write a server ip to a local file
+	if checkFileIsExist(commands.ClientFilePath) {
+		err := os.Remove(commands.ClientFilePath)
+		check(err)
+		f, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
+		fmt.Println("文件存在")
+	} else {
+		f, err1 = os.Create(commands.ClientFilePath)
+		fmt.Println("文件不存在")
+	}
+	check(err1)
+	n, err1 := io.WriteString(f, "47.105.76.115")
+	check(err1)
+	_ = n
+	//fmt.Println("hello world")
+	// add by Nigel end
 
 	return initializeIpnsKeyspace(repoRoot)
 }
