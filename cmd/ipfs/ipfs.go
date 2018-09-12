@@ -3,9 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/ipfs/go-ipfs/core/commands"
-	"io"
-	"os"
-
 	"gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds"
 )
 
@@ -28,55 +25,10 @@ var localCommands = map[string]*cmds.Command{
 	"commands": commandsClientCmd,
 }
 
-// add by Nigel start: check file exists, check the error
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func checkFileIsExist(filename string) bool {
-	var exist = true
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		exist = false
-	}
-	return exist
-}
-// add by Nigel end
-
 func init() {
 	// setting here instead of in literal to prevent initialization loop
 	// (some commands make references to Root)
 	Root.Subcommands = localCommands
-
-	// add by Nigel start: write a file
-	fmt.Println("!!!!!!!!!!!!!In init function")
-	var f *os.File
-	var err1 error
-	// write a server ip to a local file
-	var clientFilePath = "./serverIp.txt"
-	if checkFileIsExist(clientFilePath) {
-		err := os.Remove(clientFilePath)               //删除文件
-		if err != nil {
-			//如果删除失败则输出 file remove Error!
-			fmt.Println("file remove Error!")
-			//输出错误详细信息
-			fmt.Printf("%s", err)
-		} else {
-			//如果删除成功则输出 file remove OK!
-			fmt.Print("file remove OK!")
-		}
-		f, err1 = os.OpenFile(clientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
-		fmt.Println("文件存在")
-	} else {
-		f, err1 = os.Create(clientFilePath)
-		fmt.Println("文件不存在")
-	}
-	check(err1)
-	n, err1 := io.WriteString(f, "47.105.76.115")
-	check(err1)
-	fmt.Printf("写入 %d 个字节n", n)
-	// add by Nigel end
 
 	for k, v := range commands.Root.Subcommands {
 		if _, found := Root.Subcommands[k]; !found {

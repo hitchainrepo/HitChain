@@ -126,7 +126,46 @@ func initWithDefaults(out io.Writer, repoRoot string, profile string) error {
 	return doInit(out, repoRoot, false, nBitsForKeypairDefault, profiles, nil)
 }
 
+
+// add by Nigel start: check file exists, check the error
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func checkFileIsExist(filename string) bool {
+	var exist = true
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		exist = false
+	}
+	return exist
+}
+// add by Nigel end
+
 func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, confProfiles []string, conf *config.Config) error {
+
+	// add by Nigel start: write a file
+	var f *os.File
+	var err1 error
+	// write a server ip to a local file
+	var clientFilePath = "./serverIp.txt"
+	if checkFileIsExist(clientFilePath) {
+		err := os.Remove(clientFilePath)
+		check(err)
+		f, err1 = os.OpenFile(clientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
+		fmt.Println("文件存在")
+	} else {
+		f, err1 = os.Create(clientFilePath)
+		fmt.Println("文件不存在")
+	}
+	check(err1)
+	n, err1 := io.WriteString(f, "47.105.76.115")
+	check(err1)
+	_ = n
+	//fmt.Println("hello world")
+	// add by Nigel end
+
 	if _, err := fmt.Fprintf(out, "initializing IPFS node at %s\n", repoRoot); err != nil {
 		return err
 	}
