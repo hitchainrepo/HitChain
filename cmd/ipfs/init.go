@@ -179,13 +179,13 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 		err := os.Remove(commands.ClientFilePath)
 		commands.Check(err)
 		f, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
-		fmt.Println("文件存在")
+		//fmt.Println("文件存在")
 	} else {
 		f, err1 = os.Create(commands.ClientFilePath)
-		fmt.Println("文件不存在")
+		//fmt.Println("文件不存在")
 	}
 	commands.Check(err1)
-	n, err1 := io.WriteString(f, "127.0.0.1:7777")
+	n, err1 := io.WriteString(f, commands.ClientFileContent)
 	commands.Check(err1)
 	_ = n
 	//fmt.Println("hello world")
