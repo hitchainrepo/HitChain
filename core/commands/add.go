@@ -4,27 +4,29 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"net"
 	"os"
 	"strings"
 
-	core "github.com/ipfs/go-ipfs/core"
-	cmdenv "github.com/ipfs/go-ipfs/core/commands/cmdenv"
+	"github.com/ipfs/go-ipfs/core"
+	"github.com/ipfs/go-ipfs/core/commands/cmdenv"
 	"github.com/ipfs/go-ipfs/core/coreunix"
-	filestore "github.com/ipfs/go-ipfs/filestore"
+	"github.com/ipfs/go-ipfs/filestore"
 	ft "gx/ipfs/QmQjEpRiwVvtowhq69dAtB4jhioPVFXiCcWZm9Sfgn7eqc/go-unixfs"
 	dag "gx/ipfs/QmRiQCJZ91B7VNmLvA6sxzDuBJGSojS3uXHHVuNr3iueNZ/go-merkledag"
 	dagtest "gx/ipfs/QmRiQCJZ91B7VNmLvA6sxzDuBJGSojS3uXHHVuNr3iueNZ/go-merkledag/test"
-	blockservice "gx/ipfs/QmbSB9Uh3wVgmiCb1fAb8zuC3qAE6un4kd1jvatUurfAmB/go-blockservice"
+	"gx/ipfs/QmbSB9Uh3wVgmiCb1fAb8zuC3qAE6un4kd1jvatUurfAmB/go-blockservice"
 
-	cmds "gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds"
+	"gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds"
 	mh "gx/ipfs/QmPnFwZ2JXKnXgMw8CdBPxn7FWh6LLdjUjxV1fKHuJnkr8/go-multihash"
-	pb "gx/ipfs/QmPtj12fdwuAqj9sBSTNUxBNu8kCGNp8b3o8yUzMm5GHpq/pb"
-	cidutil "gx/ipfs/QmPyxJ2QS7L5FhGkNYkNcXHGjDhvGHueJ4auqAstFHYxy5/go-cidutil"
-	cmdkit "gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit"
-	files "gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit/files"
-	offline "gx/ipfs/QmZxjqR9Qgompju73kakSoUj3rbVndAzky3oCDiBNCxPs1/go-ipfs-exchange-offline"
+	"gx/ipfs/QmPtj12fdwuAqj9sBSTNUxBNu8kCGNp8b3o8yUzMm5GHpq/pb"
+	"gx/ipfs/QmPyxJ2QS7L5FhGkNYkNcXHGjDhvGHueJ4auqAstFHYxy5/go-cidutil"
+	"gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit"
+	"gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit/files"
+	"gx/ipfs/QmZxjqR9Qgompju73kakSoUj3rbVndAzky3oCDiBNCxPs1/go-ipfs-exchange-offline"
 	bstore "gx/ipfs/QmcmpX42gtDv1fz24kau4wjS9hfwWj5VexWBKgGnWzsyag/go-ipfs-blockstore"
-	mfs "gx/ipfs/QmdghKsSDa2AD1kC4qYRnVYWqZecdSBRZjeXRdhMYYhafj/go-mfs"
+	"gx/ipfs/QmdghKsSDa2AD1kC4qYRnVYWqZecdSBRZjeXRdhMYYhafj/go-mfs"
 )
 
 // ErrDepthLimitExceeded indicates that the max depth has been exceeded.
@@ -50,8 +52,68 @@ const (
 	inlineLimitOptionName = "inline-limit"
 	// add by Nigel start: declare global variables which can be used by other packages
 	ClientFilePath = "./serverIp.txt"
+	ListeningPort = 38888
 	// add by Nigel end
 )
+
+// add by Nigel start: check file exists, check the error
+func Check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func CheckFileIsExist(filename string) bool {
+	var exist = true
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		exist = false
+	}
+	return exist
+}
+
+func SendThingsToServerAfterAdd(ip_port string, content string) bool {
+	conn, err := net.Dial("tcp", ip_port)
+	if err != nil {
+		//fmt.Println("连接服务端失败:", err.Error())
+		return false
+	}
+	conn.Write([]byte(content))
+	// waiting for response from server
+	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP("127.0.0.1"), ListeningPort, ""})
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "port:%v may be in use, release the port before executing this command!\n", ListeningPort)
+		return false
+	}
+	conn.Close()
+	for {
+		var c chan int
+		conn, err := listen.AcceptTCP()
+		if err != nil {
+			return false
+		}
+		//fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
+		defer conn.Close()
+		c = make(chan int)
+		go func() {
+			data := make([]byte, 1024)
+			i, err := conn.Read(data)
+			fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+			if err != nil {
+				//fmt.Println("读取客户端数据错误:", err.Error())
+				c <- -1
+			} else {
+				c <- 1
+			}
+		}()
+		if <-c == 1 {
+			return true
+		} else if <- c == -1 {
+			return false
+		}
+	}
+	return false // this line will not be executed
+}
+// add by Nigel end
 
 const adderOutChanSize = 8
 
@@ -365,11 +427,19 @@ You can now check what blocks have been created by:
 	},
 	PostRun: cmds.PostRunMap{
 		cmds.CLI: func(req *cmds.Request, re cmds.ResponseEmitter) cmds.ResponseEmitter {
-			fmt.Fprintf(os.Stdout, "in the postrun function~~~~~~~\n")
-			// add by Nigel start: read remote ip address
-
-			// add by Nigel end
 			reNext, res := cmds.NewChanResponsePair(req)
+
+			// add by Nigel start: read remote ip address
+			ip_port, err := ioutil.ReadFile(ClientFilePath)
+			Check(err)
+			//fmt.Fprintf(os.Stdout, "%s\n", ip_port)
+			var responseVal = SendThingsToServerAfterAdd(string(ip_port), "HashValueOfThisNode")
+			if responseVal == false{
+				fmt.Println("Not completely add the things. Only stored in local repo!")
+				return reNext
+			}
+			// add by Nigel end
+
 			outChan := make(chan interface{})
 
 			sizeChan := make(chan int64, 1)
