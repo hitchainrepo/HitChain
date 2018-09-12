@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02dcdd5d-ee3e-426c-b3b3-a8c8e8e3566d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/ipfs/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/ipfs/init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/ipfs/ipfs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/ipfs/ipfs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/ipfswatch/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/ipfswatch/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/commands/add.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/commands/add.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,26 +25,26 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="39" />
+          <entry key="go" value="40" />
           <entry key="md" value="4" />
           <entry key="mk" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="39" />
+          <entry key="Go" value="40" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="1428" />
+          <entry key="go" value="1972" />
           <entry key="mk" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="1428" />
+          <entry key="Go" value="1972" />
           <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
@@ -75,8 +72,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cmd/ipfs/init.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="346">
-              <caret line="154" column="18" lean-forward="true" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
+            <state relative-caret-position="292">
+              <caret line="158" column="12" lean-forward="true" selection-start-line="158" selection-start-column="12" selection-end-line="158" selection-end-column="12" />
+              <folding>
+                <element signature="e#14#544#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/commands/root.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="25" column="21" lean-forward="true" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -84,13 +93,14 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/commands/add.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4564">
-              <caret line="437" column="97" selection-start-line="437" selection-start-column="97" selection-end-line="437" selection-end-column="97" />
+            <state relative-caret-position="369">
+              <caret line="46" column="29" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
               <folding>
                 <element signature="e#18#1267#0" expanded="true" />
-                <element signature="e#1406#2024#0" />
                 <element signature="e#2108#4177#0" />
                 <element signature="e#4353#6093#0" />
+                <element signature="e#12405#12638#0" />
+                <element signature="e#13401#14782#0" />
               </folding>
             </state>
           </provider>
@@ -148,10 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>init</find>
-      <find>ipfs add</find>
-      <find>println</find>
-      <find>output</find>
       <find>outChan</find>
       <find>added</find>
       <find>AddCmd</find>
@@ -177,6 +183,10 @@
       <find>&quot;added %s</find>
       <find>files</find>
       <find>added</find>
+      <find>nBitsForKeypairDefault</find>
+      <find>fsrepo</find>
+      <find>ClientFilePath</find>
+      <find>clientFilePath</find>
       <find>added %s</find>
     </findStrings>
     <dirStrings>
@@ -200,8 +210,9 @@
         <option value="$PROJECT_DIR$/cmd/ipfswatch/main.go" />
         <option value="$PROJECT_DIR$/cmd/ipfs/daemon.go" />
         <option value="$PROJECT_DIR$/core/coreunix/add.go" />
-        <option value="$PROJECT_DIR$/core/commands/add.go" />
         <option value="$PROJECT_DIR$/cmd/ipfs/ipfs.go" />
+        <option value="$PROJECT_DIR$/core/commands/root.go" />
+        <option value="$PROJECT_DIR$/core/commands/add.go" />
         <option value="$PROJECT_DIR$/cmd/ipfs/init.go" />
       </list>
     </option>
@@ -446,13 +457,6 @@
     <entry file="file://$PROJECT_DIR$/core/commands/dht_test.go">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/commands/root.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-999">
-          <caret line="109" column="17" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/go/src/io/io.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -566,19 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/commands/add.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4564">
-          <caret line="437" column="97" selection-start-line="437" selection-start-column="97" selection-end-line="437" selection-end-column="97" />
-          <folding>
-            <element signature="e#18#1267#0" expanded="true" />
-            <element signature="e#1406#2024#0" />
-            <element signature="e#2108#4177#0" />
-            <element signature="e#4353#6093#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cmd/ipfs/ipfs.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="73">
@@ -589,10 +580,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/commands/root.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="25" column="21" lean-forward="true" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/commands/add.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="46" column="29" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
+          <folding>
+            <element signature="e#18#1267#0" expanded="true" />
+            <element signature="e#2108#4177#0" />
+            <element signature="e#4353#6093#0" />
+            <element signature="e#12405#12638#0" />
+            <element signature="e#13401#14782#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cmd/ipfs/init.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="154" column="18" lean-forward="true" selection-start-line="154" selection-start-column="18" selection-end-line="154" selection-end-column="18" />
+        <state relative-caret-position="292">
+          <caret line="158" column="12" lean-forward="true" selection-start-line="158" selection-start-column="12" selection-end-line="158" selection-end-column="12" />
+          <folding>
+            <element signature="e#14#544#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

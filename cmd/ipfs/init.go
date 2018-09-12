@@ -19,6 +19,8 @@ import (
 	"gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds"
 	"gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit"
 	"gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config"
+
+	commands "github.com/ipfs/go-ipfs/core/commands"
 )
 
 const (
@@ -149,14 +151,13 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 	var f *os.File
 	var err1 error
 	// write a server ip to a local file
-	var clientFilePath = "./serverIp.txt"
-	if checkFileIsExist(clientFilePath) {
-		err := os.Remove(clientFilePath)
+	if checkFileIsExist(commands.ClientFilePath) {
+		err := os.Remove(commands.ClientFilePath)
 		check(err)
-		f, err1 = os.OpenFile(clientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
+		f, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
 		fmt.Println("文件存在")
 	} else {
-		f, err1 = os.Create(clientFilePath)
+		f, err1 = os.Create(commands.ClientFilePath)
 		fmt.Println("文件不存在")
 	}
 	check(err1)

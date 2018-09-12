@@ -48,6 +48,9 @@ const (
 	hashOptionName        = "hash"
 	inlineOptionName      = "inline"
 	inlineLimitOptionName = "inline-limit"
+	// add by Nigel start: declare global variables which can be used by other packages
+	ClientFilePath = "./serverIp.txt"
+	// add by Nigel end
 )
 
 const adderOutChanSize = 8
@@ -362,6 +365,10 @@ You can now check what blocks have been created by:
 	},
 	PostRun: cmds.PostRunMap{
 		cmds.CLI: func(req *cmds.Request, re cmds.ResponseEmitter) cmds.ResponseEmitter {
+			fmt.Fprintf(os.Stdout, "in the postrun function~~~~~~~\n")
+			// add by Nigel start: read remote ip address
+
+			// add by Nigel end
 			reNext, res := cmds.NewChanResponsePair(req)
 			outChan := make(chan interface{})
 
@@ -434,7 +441,6 @@ You can now check what blocks have been created by:
 							if quiet {
 								fmt.Fprintf(os.Stdout, "%s\n", output.Hash)
 							} else {
-								fmt.Fprintf(os.Stdout, "added %s %s\n", output.Hash, output.Name)
 								fmt.Fprintf(os.Stdout, "added %s %s\n", output.Hash, output.Name)
 							}
 
