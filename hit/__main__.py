@@ -14,32 +14,35 @@ def main():
     if args[0] == 'push':
         projectLocation = os.getcwd()
         remoteRepo = RemoteRepo()
-        # 获取远程地址
+        # get remote ipns hash
         remoteHash = remoteRepo.getRemoteHash()
         # remoteUrl = remoteRepo.getRemoteUrl()
+        # get remote ipfs hash
         remoteFileHash = remoteRepo.getRemoteFileHash()
 
-        # 获取权限文件
+        # get authority file
         os.system("ipfs get %s/%s" % (remoteFileHash,remoteHash))
         accessControl = AccessControl(remoteHash)
         accessControl.setKeyNameFromJson()
         accessControl.getUserKey("self")
-        # 有权限则继续
+        # judge authority
         if accessControl.verifiAuth(accessControl.pubkey):
-            # 远程仓库在本地的存放位置
+            # gen a key to store remote repo
             pathLocalRemoteRepo = genKey32()
-            # 获取远程仓库：ipfs get 远程地址
+            # download remote repo to local
             print "hit get ipfs repo to local"
             ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash,pathLocalRemoteRepo) # 要重命名
             print ipfsGetRepoCmd
             os.system(ipfsGetRepoCmd)
-            # 将版本库提交到本地仓库
+            # push repo to downloaded remote repo
             print "hit push to local"
             gitPushCmd = "git push %s" % (pathLocalRemoteRepo)
             for arg in args[1:]:
-                gitPushCmd += " " + arg # 这里注意，如果用户添加了地址，这里没有去除
+                # TODO:
+                # if user add a remote url, there should changes it to hit command
+                gitPushCmd += " " + arg
             os.system(gitPushCmd)
-            # 获取远程仓库的时间戳remoteTimeStamp
+            # get timestamp (remoteTimeStamp) of the remote repo
             print "compare local repo with remote repo"
             remoteTimeStamp = os.popen("ipfs cat %s/timestamp" % remoteFileHash).read()
             if remoteRepo.timeStamp == remoteTimeStamp:
@@ -58,7 +61,7 @@ def main():
                 accessControl.deleteIPNSKey()
             else:
                 print "Err: The remote repo has been updated by other user, please push the repo again."
-            # 删除本地的远程仓库
+            # rm temp local repo
             os.chdir(projectLocation)
             os.system("rm -rf %s" % pathLocalRemoteRepo)
         else:
