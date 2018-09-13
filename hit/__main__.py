@@ -47,13 +47,15 @@ def main():
             remoteTimeStamp = os.popen("ipfs cat %s/timestamp" % remoteFileHash).read()
             if remoteRepo.timeStamp == remoteTimeStamp:
                 os.chdir(pathLocalRemoteRepo)
-                # 在仓库中添加本地的时间戳
+                # update git repo
                 os.system("git update-server-info")
-                os.system("echo " + repr(time.time()) + " > timestamp") # 生成一个时间戳文件
-                # 将合并后的代码仓库提交到ipfs网络中: ipfs add -r
+                # gen a timestamp file for new repo
+                os.system("echo " + repr(time.time()) + " > timestamp")
+                # add new repo to ipfs network
+                # use ipfs add -r .
                 print "add repo to ipfs network"
                 newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
-                # 获取新提交的仓库rootFileUrl，并将其命名到名字空间中
+                # get ipfs hash of new add repo, and publish it to ipns
                 accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
                 print "publish file to ipns %s" % remoteHash
                 namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
