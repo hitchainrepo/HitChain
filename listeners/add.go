@@ -12,7 +12,7 @@ const (
 	//绑定IP地址
 	ip = "127.0.0.1"
 	//绑定端口号
-	port = 7777
+	port = 30008
 )
 func main() {
 	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP(ip), port, ""})
