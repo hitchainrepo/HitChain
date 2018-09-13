@@ -87,7 +87,7 @@ def main():
 
             accessControl = AccessControl(remoteHash)
             accessControl.setKeyName(repoName)
-            # 初始化权限管理json
+            # initial authority file
             accessControl.initJson()
 
             newRepoHash2 = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
@@ -96,10 +96,11 @@ def main():
 
             os.system("rm -rf %s/%s" % (projectLocation, repoName))
         elif len(args) == 1:
-            # TODO:还需完善
-            # 将本地的版本库上传
+            # TODO:
+            # this method is not finish
+            # we use this to upload a local repo to ipfs netwrok
             repoName = args[1].split("/")[-1]
-            # 改成将本地库改成bare库
+            # change local repo to a bare repo
             # os.system("git clone --bare %s" % (args[1]))
             projectLocation = os.getcwd()
             os.chdir(repoName)
