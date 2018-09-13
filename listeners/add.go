@@ -17,10 +17,10 @@ const (
 func main() {
 	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP(ip), port, ""})
 	if err != nil {
-		fmt.Println("监听端口失败:", err.Error())
+		fmt.Println("fail to monitor the port:", err.Error())
 		os.Exit(0)
 	}
-	fmt.Println("已初始化连接，等待客户端连接...")
+	fmt.Println("finish initialization, waiting for clients...")
 	Server(listen)
 }
 
@@ -39,10 +39,10 @@ func Server(listen *net.TCPListener) {
 	for {
 		conn, err := listen.AcceptTCP()
 		if err != nil {
-			fmt.Println("接受客户端连接异常:", err.Error())
+			fmt.Println("client connection error:", err.Error())
 			continue
 		}
-		fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
+		fmt.Println("connection from:", conn.RemoteAddr().String())
 		var remoteIpPort = conn.RemoteAddr().String()
 		var indexSplit = strings.Index(remoteIpPort, ":")
 		var remoteIp = remoteIpPort[:indexSplit]
@@ -54,7 +54,7 @@ func Server(listen *net.TCPListener) {
 			var receiveData = string(data[0:i])
 			fmt.Println(receiveData)
 			if err != nil {
-				fmt.Println("读取客户端数据错误:", err.Error())
+				fmt.Println("error receiving data from client:", err.Error())
 			} else {
 				var response string
 				var out bytes.Buffer
@@ -67,7 +67,7 @@ func Server(listen *net.TCPListener) {
 
 				conn2, err2 := net.Dial("tcp", remoteIp + ":" + "38888")
 				if err2 != nil {
-					fmt.Println("回连客户端失败:", err2.Error())
+					fmt.Println("fail to response to client:", err2.Error())
 					return
 				}
 				conn2.Write([]byte(response))
