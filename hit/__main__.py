@@ -113,7 +113,8 @@ def main():
 
     # elif args[0:2] == ['gen', 'userKey']:
 
-    # 添加管理员
+    # add user to authority file
+    # use the public key of user
     elif args[0] == 'add-user':
         if len(args) == 2:
             if os.access(args[1], os.F_OK):
@@ -128,7 +129,7 @@ def main():
                 accessControl = AccessControl(remoteHash)
                 accessControl.setKeyNameFromJson()
                 accessControl.getUserKey("self")
-                # 有权限则继续
+                # judge authority
                 if accessControl.verifiAuth(accessControl.pubkey):
                     pubkey = readPublicKey(args[1])
                     accessControl.addAdmin(pubkey)
@@ -149,6 +150,7 @@ def main():
         else:
             print "ERROR: Please enter a path to the public key of user."
 
+    # the process of add user
     # 判断args[2]是否为公钥路径：
     #   不是->返回
     #   是->判断用户是否有权限：
@@ -156,7 +158,8 @@ def main():
     #           提交权限文件
     #       不是->返回，删除权限文件
 
-    # 删除管理员
+    # delete user from authority file
+    # through public key to identify user
     elif args[0] == 'delete-user':
         if len(args) == 2:
             if os.access(args[1], os.F_OK):
@@ -171,7 +174,7 @@ def main():
                 accessControl = AccessControl(remoteHash)
                 accessControl.setKeyNameFromJson()
                 accessControl.getUserKey("self")
-                # 有权限则继续
+                # judge authority
                 if accessControl.verifiAuth(accessControl.pubkey):
                     pubkey = readPublicKey(args[1])
                     accessControl.deleteAdmin(pubkey)
@@ -190,6 +193,8 @@ def main():
                 print "ERROR: The path doesn't exist."
         else:
             print "ERROR: Please enter a path to the public key of user."
+
+    # the process of delete user
     # 判断args[2]是否为公钥路径：
     #   不是->返回
     #   是->判断用户是否有权限：
