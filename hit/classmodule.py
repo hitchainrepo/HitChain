@@ -43,7 +43,9 @@ class RemoteRepo():
         return self.remoteFileHash
 
 class AccessControl():
+    # authority management
     def __init__(self,pathhash):
+        # initial
         import os
         self.projPath = os.getcwd()+'/'
         self.systemPath = os.path.expanduser('~')+'/'
@@ -54,9 +56,12 @@ class AccessControl():
         self.pathhash = pathhash
 
     def setKeyName(self,keyName):
+        # set keyName
         self.keyName = keyName
 
     def setKeyNameFromJson(self):
+        # read keyName from authority file
+        # and set it as keyName of the class
         import json
         with open(self.pathhash, 'r') as f:
             jsonDict = json.load(f)
@@ -64,6 +69,7 @@ class AccessControl():
         self.keyName = jsonDict["keyName"]
 
     def initJson(self):
+        # initial authority file
         import json
         import des
         self.createUserKey("self")
@@ -79,6 +85,7 @@ class AccessControl():
             fout.close()
 
     def getPublicKeyOfIPNS(self):
+        # read ipns key from .ipfs
         import binascii
         with open(self.ipfsKeyPath+self.keyName, "rb+") as f:
             data = f.read()
@@ -86,6 +93,8 @@ class AccessControl():
             return binascii.b2a_hex(data)
 
     def createUserKey(self,userKeyName):
+        # gen a user key
+        # the key is used to identify user
         import os
         if os.access(self.filePath+userKeyName+'.public.pem',os.F_OK) and os.access(self.filePath+userKeyName+'.private.pem',os.F_OK):
             print "The key already exists"
@@ -102,6 +111,7 @@ class AccessControl():
                 f.close()
 
     def getUserKey(self,userKeyName):
+        # read user key from .hit
         import os
         if os.access(self.filePath+userKeyName+'.public.pem',os.F_OK) and os.access(self.filePath+userKeyName+'.private.pem',os.F_OK):
             import rsa
@@ -116,12 +126,14 @@ class AccessControl():
 
     @staticmethod
     def encrypt(message,pubkey):
+        # rsa encrypt
         import rsa
         import binascii
         return binascii.b2a_hex(rsa.encrypt(message.encode(), pubkey))
 
     @staticmethod
     def decrypt(crypto,privkey):
+        # rsa decrypt
         import rsa
         import binascii
         return rsa.decrypt(binascii.a2b_hex(crypto), privkey).decode()
@@ -136,6 +148,7 @@ class AccessControl():
     #     import rsa
     #     return rsa.verify(message.encode(), signature, pubkey)
 
+    # add a user to authority file
     def addAdmin(self,userPublicKey):
         import json
         with open(self.pathhash, 'r') as f:
@@ -161,6 +174,8 @@ class AccessControl():
         else:
             print "You don't have authority to do this!!!"
 
+
+    # delete a user from authority key
     def deleteAdmin(self,userPublicKey):
         import json
         with open(self.pathhash, 'r') as f:
@@ -182,6 +197,7 @@ class AccessControl():
         else:
             print "You don't have authority to do this!!!"
 
+    # verity whether the user in the authority file
     def verifiAuth(self,userPublicKey):
         import json
         with open(self.pathhash, 'r') as f:
@@ -194,6 +210,7 @@ class AccessControl():
                 break
         return authFlag
 
+    # get ipns public key from authority file
     def getPublicKeyFromJson(self):
         import json
         # import binascii
@@ -220,6 +237,7 @@ class AccessControl():
 
         return publicKeyOfIPNS
 
+    # save ipns key to .ipfs
     def savePublicKeyOfIpns(self,ipnsKey):
         import binascii
         dataTurn = binascii.a2b_hex(ipnsKey)
@@ -228,11 +246,13 @@ class AccessControl():
             f.close()
             print "You have get the key for publish ipns."
 
+    # delete the key from ipfs
     def deleteIPNSKey(self):
         import os
         cmd = "ipfs key rm %s" % self.keyName
         os.system(cmd)
 
+    # delete user key from .hit
     def deleteUserKey(self,userKeyName):
         import os
         os.system("rm "+ self.filePath + userKeyName + '.public.pem')
