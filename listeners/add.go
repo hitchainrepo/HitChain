@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net"
 	"os"
+	"os/exec"
+	"strings"
 )
 const (
 	//绑定IP地址
@@ -28,30 +31,47 @@ func Server(listen *net.TCPListener) {
 			continue
 		}
 		fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
+		var remoteIpPort = conn.RemoteAddr().String()
+		var indexSplit = strings.Index(remoteIpPort, ":")
+		var remoteIp = remoteIpPort[:indexSplit]
 		defer conn.Close()
 		go func() {
 			data := make([]byte, 1024)
-
 			i, err := conn.Read(data)
-			fmt.Println("客户端", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+			//fmt.Println("客户端", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+			var receiveData = string(data[0:i])
+			fmt.Println(receiveData)
 			if err != nil {
 				fmt.Println("读取客户端数据错误:", err.Error())
-				return
 			} else {
-				conn2, err2 := net.Dial("tcp", "127.0.0.1:38888")
+				var response string
+				var command string = "ipfs get " + receiveData
+				fmt.Println(command)
+				//var command string = "mkdir test"
+				//cmd := exec.Command("/bin/bash", "-c", command)
+				cmd := exec.Command("ipfs", "get", receiveData)
+				var out bytes.Buffer
+				cmd.Stdout = &out
+				err2 := cmd.Start()
+				if err2 != nil {
+					fmt.Println("error")
+					fmt.Println(err2)
+					response = "error"
+				} else {
+					fmt.Println("success")
+					resp := string(out.String())
+					fmt.Println(resp)
+					response = "success"
+				}
+				conn2, err2 := net.Dial("tcp", remoteIp + ":" + "38888")
 				if err2 != nil {
 					fmt.Println("回连客户端失败:", err2.Error())
 					return
 				}
-				defer conn2.Close()
-				Client(conn2)
+				conn2.Write([]byte(response))
+				conn2.Close()
 			}
-			//conn.Write(data[0:i])
 
 		}()
 	}
-}
-
-func Client(conn net.Conn) {
-	conn.Write([]byte("服务器返回的消息"))
 }
