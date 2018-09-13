@@ -23,6 +23,18 @@ func main() {
 	fmt.Println("已初始化连接，等待客户端连接...")
 	Server(listen)
 }
+
+func handleCommandErr(err error) string {
+	var response string
+	if err != nil {
+		fmt.Println("Something went wrong while handling commands!!!")
+		response = "error"
+	} else {
+		response = "success"
+	}
+	return response
+}
+
 func Server(listen *net.TCPListener) {
 	for {
 		conn, err := listen.AcceptTCP()
@@ -45,24 +57,14 @@ func Server(listen *net.TCPListener) {
 				fmt.Println("读取客户端数据错误:", err.Error())
 			} else {
 				var response string
-				var command string = "ipfs get " + receiveData
-				fmt.Println(command)
-				//var command string = "mkdir test"
-				//cmd := exec.Command("/bin/bash", "-c", command)
-				cmd := exec.Command("ipfs", "get", receiveData)
 				var out bytes.Buffer
+				command := "ipfs get " + receiveData + " --output=repos/" + receiveData
+				cmd := exec.Command("/bin/bash", "-c", command)
 				cmd.Stdout = &out
 				err2 := cmd.Start()
-				if err2 != nil {
-					fmt.Println("error")
-					fmt.Println(err2)
-					response = "error"
-				} else {
-					fmt.Println("success")
-					resp := string(out.String())
-					fmt.Println(resp)
-					response = "success"
-				}
+				response = handleCommandErr(err2)
+				fmt.Println(response)
+
 				conn2, err2 := net.Dial("tcp", remoteIp + ":" + "38888")
 				if err2 != nil {
 					fmt.Println("回连客户端失败:", err2.Error())
