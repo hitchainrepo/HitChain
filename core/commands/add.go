@@ -52,7 +52,7 @@ const (
 	inlineLimitOptionName = "inline-limit"
 	// add by Nigel start: declare global variables which can be used by other packages
 	ClientFilePath = "./serverIp.txt"
-	ClientFileContent = "127.0.0.1:7777" // this is the listener of server
+	ClientFileContent = "47.105.76.115:7777" // this is the listener of server
 	ListeningPort = 38888
 	// add by Nigel end
 )
