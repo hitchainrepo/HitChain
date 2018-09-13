@@ -1,7 +1,9 @@
 # -- coding: utf-8 --
 def gitPushExchange(pathLocalRemoteRepo,args):
     import os
-    # TUDO:git push命令转换，将相关参数添加进命令中
+    # TUDO:
+    # changge git push command to hit
+    # identify the remote url and adjust it to IPFS
     remoteNameList = os.popen("git remote").read().splitlines()
     for i,arg in enumerate(args):
         if arg in remoteNameList:

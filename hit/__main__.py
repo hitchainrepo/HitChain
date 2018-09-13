@@ -137,6 +137,7 @@ def main():
 
                 os.chdir(projectLocation)
                 os.system("rm -rf %s" % pathLocalRemoteRepo)
+                # os.system("rm %s" % )
             else:
                 print "ERROR: The path doesn't exist."
         else:
