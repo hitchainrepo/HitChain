@@ -4,6 +4,7 @@ class RemoteRepo():
     def __init__(self):
         import os
         print "hit get remote url"
+        # get ipns hash from git remote command
         gitRemoteCmd = "git remote get-url --all origin"
         gitRemote = os.popen(gitRemoteCmd).read().strip('\n')
         gitRemoteSplit = gitRemote.split("/")
@@ -12,14 +13,18 @@ class RemoteRepo():
             self.remoteHash = gitRemoteSplit[-1]
             print gitRemoteSplit
             print "hit resolve ipns name"
+            # analysis ipfs hash from ipns hash
+            # use ipfs resolve command
             remoteFileUrlList = os.popen("ipfs resolve /ipns/%s" % self.remoteHash).read().strip("\n").split("/")
             if remoteFileUrlList[1] == "ipfs":
                 self.remoteFileHash = remoteFileUrlList[-1]
                 print "hit get ipfs file key"
+                # get timestamp of the repo
                 ipfsCatTimeStamp = "ipfs cat %s/timestamp" % (self.remoteFileHash)
                 print ipfsCatTimeStamp
                 self.timeStamp = os.popen(ipfsCatTimeStamp).read()
         else:
+            # fail to analysis the url path
             self.remoteHash = ""
             self.timeStamp = ""
             self.remoteUrl = ""
