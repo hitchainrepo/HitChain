@@ -98,13 +98,23 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 		go func() {
 			data := make([]byte, 1024)
 			i, err := conn.Read(data)
-			fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
 			if err != nil {
 				//fmt.Println("读取客户端数据错误:", err.Error())
 				c <- -1
 			} else {
-				c <- 1
+				//fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+
+				// reserved for the judge of server address start
+				// reserved for the judge of server address end
+				var responseResult = string(data[0:i])
+				if responseResult != "success" {
+					c <- -1
+				} else {
+					c <- 1
+				}
 			}
+
+
 		}()
 		if <-c == 1 {
 			return true
@@ -430,17 +440,6 @@ You can now check what blocks have been created by:
 		cmds.CLI: func(req *cmds.Request, re cmds.ResponseEmitter) cmds.ResponseEmitter {
 			reNext, res := cmds.NewChanResponsePair(req)
 
-			// add by Nigel start: read remote ip address
-			ip_port, err := ioutil.ReadFile(ClientFilePath)
-			Check(err)
-			//fmt.Fprintf(os.Stdout, "%s\n", ip_port)
-			var responseVal = SendThingsToServerAfterAdd(string(ip_port), "HashValueOfThisNode")
-			if responseVal == false{
-				fmt.Println("Not completely add the things. Only stored in local repo!")
-				return reNext
-			}
-			// add by Nigel end
-
 			outChan := make(chan interface{})
 
 			sizeChan := make(chan int64, 1)
@@ -496,11 +495,23 @@ You can now check what blocks have been created by:
 								fmt.Fprintln(os.Stdout, lastHash)
 							}
 
+							// add by Nigel start: read remote ip address and send the last hash to the remote ip address
+							ip_port, err := ioutil.ReadFile(ClientFilePath)
+							Check(err)
+							var savedOrNot = SendThingsToServerAfterAdd(string(ip_port), lastHash)
+							if savedOrNot == false{
+								fmt.Println("Haven't completely added the files. Only stored in local repo!")
+							} else if savedOrNot == true {
+								fmt.Println("Added completely!")
+							}
+							// add by Nigel end
+
 							break LOOP
 						}
 						output := out.(*coreunix.AddedObject)
 						if len(output.Hash) > 0 {
 							lastHash = output.Hash
+
 							if quieter {
 								continue
 							}
