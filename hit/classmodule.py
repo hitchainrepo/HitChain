@@ -1,5 +1,6 @@
 # -- coding: utf-8 --
 class RemoteRepo():
+    # read message from repo
     def __init__(self):
         import os
         print "hit get remote url"
