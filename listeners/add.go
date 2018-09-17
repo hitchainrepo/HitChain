@@ -6,13 +6,12 @@ import (
 	"net"
 	"os"
 	"os/exec"
-	"strings"
 )
 const (
 	//绑定IP地址
 	ip = "127.0.0.1"
 	//绑定端口号
-	port = 30008
+	port = 30004
 )
 func main() {
 	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP(ip), port, ""})
@@ -43,14 +42,11 @@ func Server(listen *net.TCPListener) {
 			continue
 		}
 		fmt.Println("connection from:", conn.RemoteAddr().String())
-		var remoteIpPort = conn.RemoteAddr().String()
-		var indexSplit = strings.Index(remoteIpPort, ":")
-		var remoteIp = remoteIpPort[:indexSplit]
 		defer conn.Close()
 		go func() {
 			data := make([]byte, 1024)
 			i, err := conn.Read(data)
-			//fmt.Println("客户端", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+			fmt.Println("客户端", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
 			var receiveData = string(data[0:i])
 			fmt.Println(receiveData)
 			if err != nil {
@@ -65,13 +61,7 @@ func Server(listen *net.TCPListener) {
 				response = handleCommandErr(err2)
 				fmt.Println(response)
 
-				conn2, err2 := net.Dial("tcp", remoteIp + ":" + "38888")
-				if err2 != nil {
-					fmt.Println("fail to response to client:", err2.Error())
-					return
-				}
-				conn2.Write([]byte(response))
-				conn2.Close()
+				conn.Write([]byte(response)) // return the message through the original connection
 			}
 
 		}()
