@@ -96,6 +96,11 @@ The CLI will exit with one of the following values:
 		cmdkit.BoolOption("local", "L", "Run the command locally, instead of using the daemon."),
 		cmdkit.StringOption(ApiOption, "Use a specific API instance (defaults to /ip4/127.0.0.1/tcp/5001)"),
 
+		// add by Nigel start:add shortcut params keys (serverIp and serverPort)
+		cmdkit.StringOption("serverIp", "sip", "Ip of server"),
+		cmdkit.StringOption("serverPort", "sp", "port of server"),
+		// add by Nigel end
+
 		// global options, added to every command
 		cmds.OptionEncodingType,
 		cmds.OptionStreamChannels,
