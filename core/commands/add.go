@@ -52,8 +52,7 @@ const (
 	inlineLimitOptionName = "inline-limit"
 	// add by Nigel start: declare global variables which can be used by other packages
 	ClientFilePath = "./serverIp.txt"
-	ClientFileContent = "47.105.76.115:7777" // this is the listener of server
-	ListeningPort = 38888
+	ClientFileContent = "47.105.76.115:30004" // this is the listener of server
 	// add by Nigel end
 )
 
@@ -75,54 +74,57 @@ func CheckFileIsExist(filename string) bool {
 func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 	conn, err := net.Dial("tcp", ip_port)
 	if err != nil {
-		//fmt.Println("连接服务端失败:", err.Error())
+		fmt.Println("连接服务端失败:", err.Error())
 		return false
 	}
 	conn.Write([]byte(content))
+	fmt.Println("finish sending messages to server!")
 	// waiting for response from server
-	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP("127.0.0.1"), ListeningPort, ""})
-	if err != nil {
-		fmt.Fprintf(os.Stdout, "port:%v may be in use, release the port before executing this command!\n", ListeningPort)
-		return false
-	}
-	conn.Close()
+	var response = make([]byte, 1024)
+	var count = 0
+	//var c chan int
 	for {
-		var c chan int
-		conn, err := listen.AcceptTCP()
+		count, err = conn.Read(response)
+		fmt.Println(count)
 		if err != nil {
 			return false
-		}
-		//fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
-		defer conn.Close()
-		c = make(chan int)
-		go func() {
-			data := make([]byte, 1024)
-			i, err := conn.Read(data)
-			if err != nil {
-				//fmt.Println("读取客户端数据错误:", err.Error())
-				c <- -1
-			} else {
-				//fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
-
-				// reserved for the judge of server address start
-				// reserved for the judge of server address end
-				var responseResult = string(data[0:i])
-				if responseResult != "success" {
-					c <- -1
-				} else {
-					c <- 1
-				}
+		} else {
+			//fmt.Println(response[0:count])
+			if string(response[0:count]) == "success" {
+				return true
 			}
-
-
-		}()
-		if <-c == 1 {
-			return true
-		} else if <- c == -1 {
-			return false
 		}
 	}
-	return false // this line will not be executed
+
+	//c = make(chan int)
+	//defer conn.Close()
+	//go func() {
+	//	data := make([]byte, 1024)
+	//	i, err := conn.Read(data)
+	//	if err != nil {
+	//		fmt.Println("读取客户端数据错误:", err.Error())
+	//		c <- -1
+	//	} else {
+	//		fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
+	//
+	//		// reserved for the judge of server address start
+	//		// reserved for the judge of server address end
+	//		var responseResult = string(data[0:i])
+	//		if responseResult != "success" {
+	//			c <- -1
+	//		} else {
+	//			c <- 1
+	//		}
+	//	}
+	//
+	//
+	//}()
+	//if <-c == 1 {
+	//	return true
+	//} else if <- c == -1 {
+	//	return false
+	//}
+	//return false // this line will not be executed
 }
 // add by Nigel end
 
