@@ -107,6 +107,29 @@ environment variable:
 			profiles = strings.Split(profile, ",")
 		}
 
+		// add by Nigel start: get the arguments
+		var params = req.Options
+		var serverIp string
+		if value, ok := params["serverIp"]; ok {
+			serverIp = value.(string)
+			_ = serverIp
+		}
+		var serverPort string
+		if value, ok := params["serverPort"]; ok {
+			serverPort = value.(string)
+			_ = serverPort
+		}
+		if serverPort == "" {
+			fmt.Println("no server port")
+			return
+		}
+		if serverIp == "" {
+			fmt.Println("no server ip")
+			return
+		}
+
+		// add by Nigel end
+
 		if err := doInit(os.Stdout, cctx.ConfigRoot, empty, nBitsForKeypair, profiles, conf); err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -169,7 +192,6 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 			return err
 		}
 	}
-
 
 	// add by Nigel start: write a file
 	var f *os.File
