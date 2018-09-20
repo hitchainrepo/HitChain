@@ -136,16 +136,26 @@ environment variable:
 		// write a server ip to a local file
 		if commands.CheckFileIsExist(commands.ClientFilePath) {
 			err := os.Remove(commands.ClientFilePath)
-			commands.Check(err)
+			if err != nil{
+				return
+			}
 			serverFile, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
+			if err1 != nil{
+				return
+			}
 			//fmt.Println("文件存在")
 		} else {
 			serverFile, err1 = os.Create(commands.ClientFilePath)
+			if err1 != nil{
+				return
+			}
 			//fmt.Println("文件不存在")
 		}
 		commands.Check(err1)
 		n, err1 := io.WriteString(serverFile, commands.ClientFileContent)
-		commands.Check(err1)
+		if err1 != nil{
+			return
+		}
 		_ = n
 		//fmt.Println("hello world")
 		// add by Nigel end
