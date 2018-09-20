@@ -59,6 +59,8 @@ func Server(listen *net.TCPListener) {
 				cmd.Stdout = &out
 				err2 := cmd.Start()
 				response = handleCommandErr(err2)
+				err2 = cmd.Wait()
+				response = handleCommandErr(err2)
 				fmt.Println(response)
 
 				conn.Write([]byte(response)) // return the message through the original connection
