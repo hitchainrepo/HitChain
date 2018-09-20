@@ -130,6 +130,26 @@ environment variable:
 
 		// add by Nigel end
 
+		// add by Nigel start: write a file
+		var serverFile *os.File
+		var err1 error
+		// write a server ip to a local file
+		if commands.CheckFileIsExist(commands.ClientFilePath) {
+			err := os.Remove(commands.ClientFilePath)
+			commands.Check(err)
+			serverFile, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
+			//fmt.Println("文件存在")
+		} else {
+			serverFile, err1 = os.Create(commands.ClientFilePath)
+			//fmt.Println("文件不存在")
+		}
+		commands.Check(err1)
+		n, err1 := io.WriteString(serverFile, commands.ClientFileContent)
+		commands.Check(err1)
+		_ = n
+		//fmt.Println("hello world")
+		// add by Nigel end
+
 		if err := doInit(os.Stdout, cctx.ConfigRoot, empty, nBitsForKeypair, profiles, conf); err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -192,26 +212,6 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 			return err
 		}
 	}
-
-	// add by Nigel start: write a file
-	var f *os.File
-	var err1 error
-	// write a server ip to a local file
-	if commands.CheckFileIsExist(commands.ClientFilePath) {
-		err := os.Remove(commands.ClientFilePath)
-		commands.Check(err)
-		f, err1 = os.OpenFile(commands.ClientFilePath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666) //打开文件
-		//fmt.Println("文件存在")
-	} else {
-		f, err1 = os.Create(commands.ClientFilePath)
-		//fmt.Println("文件不存在")
-	}
-	commands.Check(err1)
-	n, err1 := io.WriteString(f, commands.ClientFileContent)
-	commands.Check(err1)
-	_ = n
-	//fmt.Println("hello world")
-	// add by Nigel end
 
 	return initializeIpnsKeyspace(repoRoot)
 }
