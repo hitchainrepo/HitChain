@@ -186,6 +186,7 @@ func defaultMux(path string) corehttp.ServeOption {
 
 func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment) {
 	// Inject metrics before we do anything
+	fmt.Println(req)
 	err := mprome.Inject()
 	if err != nil {
 		log.Errorf("Injecting prometheus handler for metrics failed with message: %s\n", err.Error())

@@ -219,6 +219,23 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 		}
 	}
 
+	// add by Nigel start: add swarm.key file into .ipfs directory
+	if commands.CheckFileIsExist(path.Join(repoRoot, "swarm.key")) {
+		return errors.New("file already exists")
+	} else {
+		swarmKeyFile, err1 := os.Create(path.Join(repoRoot, "swarm.key"))
+		if err1 != nil{
+			return err1
+		}
+		swarmKeyFileContent := commands.SwarmKeyContent
+		n, err1 := io.WriteString(swarmKeyFile, swarmKeyFileContent)
+		if err1 != nil{
+			return err1
+		}
+		_ = n
+	}
+	// add by Nigel end
+
 	return initializeIpnsKeyspace(repoRoot)
 }
 
