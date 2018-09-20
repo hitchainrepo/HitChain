@@ -151,8 +151,8 @@ environment variable:
 			}
 			//fmt.Println("文件不存在")
 		}
-		commands.Check(err1)
-		n, err1 := io.WriteString(serverFile, commands.ClientFileContent)
+		clientFileContent := serverIp + ":" + serverPort
+		n, err1 := io.WriteString(serverFile, clientFileContent)
 		if err1 != nil{
 			return
 		}
