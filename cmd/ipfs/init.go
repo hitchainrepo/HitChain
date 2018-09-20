@@ -133,7 +133,6 @@ environment variable:
 		// add by Nigel start: write a file
 		var serverFile *os.File
 		var err1 error
-		// write a server ip to a local file
 		if commands.CheckFileIsExist(commands.ClientFilePath) {
 			err := os.Remove(commands.ClientFilePath)
 			if err != nil{
@@ -143,13 +142,11 @@ environment variable:
 			if err1 != nil{
 				return
 			}
-			//fmt.Println("文件存在")
 		} else {
 			serverFile, err1 = os.Create(commands.ClientFilePath)
 			if err1 != nil{
 				return
 			}
-			//fmt.Println("文件不存在")
 		}
 		clientFileContent := serverIp + ":" + serverPort
 		n, err1 := io.WriteString(serverFile, clientFileContent)
@@ -157,7 +154,6 @@ environment variable:
 			return
 		}
 		_ = n
-		//fmt.Println("hello world")
 		// add by Nigel end
 
 		if err := doInit(os.Stdout, cctx.ConfigRoot, empty, nBitsForKeypair, profiles, conf); err != nil {
