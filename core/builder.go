@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"os"
 	"syscall"
 	"time"
@@ -113,7 +114,13 @@ func defaultRepo(dstore repo.Datastore) (repo.Repo, error) {
 		return nil, err
 	}
 
-	c.Bootstrap = cfg.DefaultBootstrapAddresses
+	// add by Nigel start: change default BootstrapAddress to new one
+	//c.Bootstrap = cfg.DefaultBootstrapAddresses
+	c.Bootstrap = []string{
+		"/ip4/47.105.76.115/tcp/4001/ipfs/QmTXvThuPMHgQyALXVKQYkeaFeMEdA9sQKK6CSqo1Qa7yy",
+	}
+	fmt.Println(c.Bootstrap)
+	// add by Nigel end
 	c.Addresses.Swarm = []string{"/ip4/0.0.0.0/tcp/4001"}
 	c.Identity.PeerID = pid.Pretty()
 	c.Identity.PrivKey = base64.StdEncoding.EncodeToString(privkeyb)

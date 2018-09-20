@@ -7,12 +7,12 @@ import (
 	"sort"
 
 	cmds "github.com/ipfs/go-ipfs/commands"
-	e "github.com/ipfs/go-ipfs/core/commands/e"
-	repo "github.com/ipfs/go-ipfs/repo"
+	"github.com/ipfs/go-ipfs/core/commands/e"
+	"github.com/ipfs/go-ipfs/repo"
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 
 	"gx/ipfs/QmSP88ryZkHSRn1fnngAaV2Vcn63WUJzAavnRM9CVdU1Ky/go-ipfs-cmdkit"
-	config "gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config"
+	"gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config"
 )
 
 type BootstrapOutput struct {
@@ -141,6 +141,7 @@ var bootstrapAddDefaultCmd = &cmds.Command{
 in the bootstrap list).`,
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
+
 		defltPeers, err := config.DefaultBootstrapPeers()
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
