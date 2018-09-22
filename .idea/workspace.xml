@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02dcdd5d-ee3e-426c-b3b3-a8c8e8e3566d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/cmd/ipfs/daemon.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/ipfs/daemon.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/builder.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/builder.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/commands/add.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/commands/add.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/commands/bootstrap.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/commands/bootstrap.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/commands/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/commands/get.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,26 +27,29 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="87" />
+          <entry key="Makefile" value="1" />
+          <entry key="go" value="92" />
+          <entry key="json" value="1" />
           <entry key="md" value="4" />
           <entry key="mk" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="87" />
-          <entry key="PLAIN_TEXT" value="6" />
+          <entry key="Go" value="92" />
+          <entry key="JSON" value="1" />
+          <entry key="PLAIN_TEXT" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="8366" />
+          <entry key="go" value="8465" />
           <entry key="mk" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="8366" />
+          <entry key="Go" value="8465" />
           <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
@@ -64,7 +65,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cmd/ipfs/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1937">
+            <state relative-caret-position="-760">
               <caret line="244" column="67" selection-start-line="244" selection-start-column="61" selection-end-line="244" selection-end-column="67" />
               <folding>
                 <element signature="e#69#1371#0" expanded="true" />
@@ -93,11 +94,31 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cmd/ipfs/init.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="140" column="34" selection-start-line="140" selection-start-column="34" selection-end-line="140" selection-end-column="34" />
+            <state relative-caret-position="56">
+              <caret line="194" column="28" lean-forward="true" selection-start-line="194" selection-start-column="28" selection-end-line="194" selection-end-column="28" />
               <folding>
                 <element signature="e#14#544#0" expanded="true" />
+                <element signature="e#2496#2590#0" />
+                <element signature="e#2748#3011#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/init.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1791">
+              <caret line="160" column="5" lean-forward="true" selection-start-line="160" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/commands/get.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="140" column="32" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -112,12 +133,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cmd/ipfs/daemon.go">
+        <entry file="file://$PROJECT_DIR$/repo/repo.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1669">
-              <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+            <state relative-caret-position="630">
+              <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
               <folding>
-                <element signature="e#14#1011#0" expanded="true" />
+                <element signature="e#14#362#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -126,8 +147,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/builder.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="119" column="88" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="88" />
+            <state relative-caret-position="148">
+              <caret line="99" column="16" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="16" />
               <folding>
                 <element signature="e#14#1772#0" expanded="true" />
               </folding>
@@ -138,22 +159,28 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/commands/bootstrap.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="42" column="16" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="16" />
-              <folding>
-                <element signature="e#18#378#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="98">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/bootstrap_peers.go">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/commands/request.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="32" column="86" selection-start-line="32" selection-start-column="86" selection-end-line="32" selection-end-column="86" />
+            <state relative-caret-position="135">
+              <caret line="9" column="50" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/bindata.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="229">
+              <caret line="119" column="41" selection-start-line="119" selection-start-column="41" selection-end-line="119" selection-end-column="41" />
               <folding>
-                <element signature="e#16#317#0" expanded="true" />
+                <element signature="e#906#1010#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -163,14 +190,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>parse</find>
-      <find>f</find>
-      <find>Parse</find>
-      <find>makeExecutor</find>
-      <find>swarm.key</find>
-      <find>Swarm listening on</find>
-      <find>PNetFingerprint</find>
-      <find>printSwarmAddrs</find>
       <find>fmt.println</find>
       <find>fillDefaults</find>
       <find>bootstrapAddCmd</find>
@@ -181,19 +200,31 @@
       <find>bootstrap</find>
       <find>defaultRepo</find>
       <find>Bootstrap</find>
-      <find>DefaultBootstrapAddresses</find>
       <find>NewNode</find>
       <find>nBitsForKeypairDefault</find>
       <find>ipfs configuration file already exists</find>
       <find>initWithDefaults</find>
+      <find>daemonFunc</find>
+      <find>api not running</find>
+      <find>QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt</find>
+      <find>bootstrapAdd</find>
+      <find>[done]</find>
+      <find>package.json</find>
+      <find>_bindata</find>
       <find>gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config</find>
       <find>QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt</find>
+      <find>go build</find>
+      <find>github.com/nigel007/go-ipfs-config</find>
       <find>daemon</find>
-      <find>bootstrapAdd</find>
-      <find>QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt</find>
-      <find>daemonFunc</find>
+      <find>go-ipfs-config</find>
+      <find>DefaultBootstrapAddresses</find>
       <find>cfg</find>
+      <find>init(</find>
     </findStrings>
+    <replaceStrings>
+      <replace>github.com/nigel007/go-ipfs-config</replace>
+      <replace>gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config</replace>
+    </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/cmd/ipfs</dir>
       <dir>$PROJECT_DIR$/cmd</dir>
@@ -222,12 +253,15 @@
         <option value="$PROJECT_DIR$/../../../vendor/gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds/cli/run.go" />
         <option value="$PROJECT_DIR$/../../../vendor/gx/ipfs/QmPTfgFTo9PFr1PvPKyKoeMgBvYPh6cX3aDP7DHKVbnCbi/go-ipfs-cmds/executor.go" />
         <option value="$PROJECT_DIR$/../../../gx/ipfs/QmekzFM3hPZjTjUFGTABdQkEnQ3PTiMstY198PwSFr5w1Q/go-metrics-interface/context.go" />
-        <option value="$PROJECT_DIR$/cmd/ipfs/init.go" />
         <option value="$PROJECT_DIR$/cmd/ipfs/daemon.go" />
-        <option value="$PROJECT_DIR$/core/commands/bootstrap.go" />
         <option value="$PROJECT_DIR$/core/commands/add.go" />
         <option value="$PROJECT_DIR$/core/builder.go" />
         <option value="$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/bootstrap_peers.go" />
+        <option value="$PROJECT_DIR$/core/commands/bootstrap.go" />
+        <option value="$PROJECT_DIR$/assets/bindata.go" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/cmd/ipfs/init.go" />
+        <option value="$PROJECT_DIR$/core/commands/get.go" />
       </list>
     </option>
   </component>
@@ -244,7 +278,7 @@
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1280" />
-    <option name="height" value="800" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -258,11 +292,6 @@
             <path>
               <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-ipfs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="go-ipfs" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
@@ -305,32 +334,6 @@
             <path>
               <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="GOPATH &lt;go-ipfs&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
-            </path>
-            <path>
-              <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="GOPATH &lt;go-ipfs&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="GOPATH &lt;go-ipfs&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="gx" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go-ipfs" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="GOPATH &lt;go-ipfs&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="gx" type="462c0819:PsiDirectoryNode" />
-              <item name="ipfs" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -380,7 +383,7 @@
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14781906" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15831988" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -392,33 +395,13 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.08219178" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22213247" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -429,11 +412,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/bootstrap_peers.go</url>
-          <line>49</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/ipfs/ipfs.go</url>
           <line>33</line>
@@ -491,37 +469,16 @@
           <properties />
           <option name="timeStamp" value="31" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/ipfs/init.go</url>
+          <line>194</line>
+          <properties />
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/commands/commands_test.go">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/commands/dht_test.go">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file:///usr/local/go/src/io/io.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="292" column="12" lean-forward="true" selection-start-line="292" selection-start-column="12" selection-end-line="292" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/go/src/builtin/builtin.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="179" column="10" selection-start-line="179" selection-start-column="10" selection-end-line="179" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/go/src/os/exec/exec.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="150" column="24" selection-start-line="150" selection-start-column="24" selection-end-line="150" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cmd/ipfswatch/README.md">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -626,13 +583,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="47" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/commands/request.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="18" column="21" lean-forward="true" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -775,13 +725,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/repo/repo.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="26" column="11" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/Cellar/go/1.10.3/libexec/src/encoding/json/stream.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -789,9 +732,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cmd/ipfs/daemon.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1669">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <element signature="e#14#1011#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/bootstrap_peers.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="89" selection-start-line="23" selection-start-column="89" selection-end-line="23" selection-end-column="89" />
+          <folding>
+            <element signature="e#16#317#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/bindata.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="119" column="41" selection-start-line="119" selection-start-column="41" selection-end-line="119" selection-end-column="41" />
+          <folding>
+            <element signature="e#906#1010#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Godeps/_workspace/src/github.com/jbenet/go-random-files/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/commands/request.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="50" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cmd/ipfs/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1937">
+        <state relative-caret-position="-760">
           <caret line="244" column="67" selection-start-line="244" selection-start-column="61" selection-end-line="244" selection-end-column="67" />
           <folding>
             <element signature="e#69#1371#0" expanded="true" />
@@ -816,13 +803,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmd/ipfs/init.go">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="140" column="34" selection-start-line="140" selection-start-column="34" selection-end-line="140" selection-end-column="34" />
-          <folding>
-            <element signature="e#14#544#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="121">
+          <caret line="513" column="22" selection-start-line="513" selection-start-column="22" selection-end-line="513" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -833,43 +817,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/commands/bootstrap.go">
+    <entry file="file://$PROJECT_DIR$/repo/repo.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="42" column="16" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="16" />
+        <state relative-caret-position="630">
+          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
           <folding>
-            <element signature="e#18#378#0" expanded="true" />
+            <element signature="e#14#362#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cmd/ipfs/daemon.go">
+    <entry file="file://$PROJECT_DIR$/core/commands/bootstrap.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1669">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#14#1011#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="98">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/builder.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="119" column="88" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="88" />
+        <state relative-caret-position="148">
+          <caret line="99" column="16" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="16" />
           <folding>
             <element signature="e#14#1772#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/bootstrap_peers.go">
+    <entry file="file://$PROJECT_DIR$/cmd/ipfs/init.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="32" column="86" selection-start-line="32" selection-start-column="86" selection-end-line="32" selection-end-column="86" />
+        <state relative-caret-position="56">
+          <caret line="194" column="28" lean-forward="true" selection-start-line="194" selection-start-column="28" selection-end-line="194" selection-end-column="28" />
           <folding>
-            <element signature="e#16#317#0" expanded="true" />
+            <element signature="e#14#544#0" expanded="true" />
+            <element signature="e#2496#2590#0" />
+            <element signature="e#2748#3011#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gx/ipfs/QmTyiSs9VgdVb4pnzdjtKhcfdTkHFEaNn6xnCbZq4DTFRt/go-ipfs-config/init.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1791">
+          <caret line="160" column="5" lean-forward="true" selection-start-line="160" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/commands/get.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="140" column="32" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="32" />
         </state>
       </provider>
     </entry>

@@ -137,6 +137,8 @@ may also specify the level of compression by specifying '-l=<1-9>'.
 				if err := gw.Write(outReader, outPath); err != nil {
 					re.SetError(err, cmdkit.ErrNormal)
 				}
+
+				fmt.Println("get:success")
 			}()
 
 			return reNext
