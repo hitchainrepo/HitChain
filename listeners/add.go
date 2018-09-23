@@ -35,6 +35,16 @@ func handleCommandErr(err error) string {
 	return response
 }
 
+func handleOutput(line string) string {
+	var response string
+	if line == "get:success"{
+		response = "success"
+	}else{
+		response = "error"
+	}
+	return response
+}
+
 
 func Server(listen *net.TCPListener) {
 	for {
@@ -54,8 +64,7 @@ func Server(listen *net.TCPListener) {
 			if err != nil {
 				fmt.Println("error receiving data from client:", err.Error())
 			} else {
-				var response string
-				//var out bytes.Buffer
+				var response string = "error"
 				command := "ipfs get " + receiveData + " --output=repos/" + receiveData
 				cmd := exec.Command("/bin/bash", "-c", command)
 				fmt.Println(cmd.Args)
@@ -64,20 +73,19 @@ func Server(listen *net.TCPListener) {
 					fmt.Println(err)
 				}
 				cmd.Start()
-				//创建一个流来读取管道内内容，这里逻辑是通过一行一行的读取的
 				reader := bufio.NewReader(stdout)
 
-				//实时循环读取输出流中的一行内容
 				for {
 					line, err2 := reader.ReadString('\n')
-					if err2 != nil || io.EOF == err2 {
-						fmt.Println(err2)
+					response = handleOutput(line)
+					if response == "success" {
 						break
 					}
-					fmt.Println(line)
+					if err2 != nil || io.EOF == err2 {
+						break
+					}
 				}
 
-				//阻塞直到该命令执行完成，该命令必须是被Start方法开始执行的
 				cmd.Wait()
 				conn.Write([]byte(response)) // return the message through the original connection
 			}
