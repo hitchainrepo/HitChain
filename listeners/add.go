@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"strings"
 )
 const (
 	//绑定IP地址
@@ -37,6 +38,8 @@ func handleCommandErr(err error) string {
 
 func handleOutput(line string) string {
 	var response string
+	line = strings.TrimSpace(line)
+	fmt.Println(line)
 	if line == "get:success"{
 		response = "success"
 	}else{
@@ -85,7 +88,7 @@ func Server(listen *net.TCPListener) {
 						break
 					}
 				}
-
+				fmt.Println(response)
 				cmd.Wait()
 				conn.Write([]byte(response)) // return the message through the original connection
 			}
