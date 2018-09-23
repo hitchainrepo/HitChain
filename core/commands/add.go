@@ -86,13 +86,15 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 	//var c chan int
 	for {
 		count, err = conn.Read(response)
-		fmt.Println(count)
+		//fmt.Println(count)
 		if err != nil {
 			return false
 		} else {
 			//fmt.Println(response[0:count])
 			if string(response[0:count]) == "success" {
 				return true
+			} else {
+				return false
 			}
 		}
 	}
