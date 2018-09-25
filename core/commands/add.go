@@ -79,18 +79,14 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 		return false
 	}
 	conn.Write([]byte(content))
-	fmt.Println("finish sending messages to server!")
-	// waiting for response from server
+	//fmt.Println("finish sending messages to server!")
 	var response = make([]byte, 1024)
 	var count = 0
-	//var c chan int
 	for {
 		count, err = conn.Read(response)
-		//fmt.Println(count)
 		if err != nil {
 			return false
 		} else {
-			//fmt.Println(response[0:count])
 			if string(response[0:count]) == "success" {
 				return true
 			} else {
@@ -98,36 +94,6 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 			}
 		}
 	}
-
-	//c = make(chan int)
-	//defer conn.Close()
-	//go func() {
-	//	data := make([]byte, 1024)
-	//	i, err := conn.Read(data)
-	//	if err != nil {
-	//		fmt.Println("读取客户端数据错误:", err.Error())
-	//		c <- -1
-	//	} else {
-	//		fmt.Println("服务器", conn.RemoteAddr().String(), "发来数据:", string(data[0:i]))
-	//
-	//		// reserved for the judge of server address start
-	//		// reserved for the judge of server address end
-	//		var responseResult = string(data[0:i])
-	//		if responseResult != "success" {
-	//			c <- -1
-	//		} else {
-	//			c <- 1
-	//		}
-	//	}
-	//
-	//
-	//}()
-	//if <-c == 1 {
-	//	return true
-	//} else if <- c == -1 {
-	//	return false
-	//}
-	//return false // this line will not be executed
 }
 // add by Nigel end
 
@@ -503,7 +469,7 @@ You can now check what blocks have been created by:
 							// add by Nigel start: read remote ip address and send the last hash to the remote ip address
 							ip_port, err := ioutil.ReadFile(ClientFilePath)
 							Check(err)
-							var savedOrNot = SendThingsToServerAfterAdd(string(ip_port), lastHash)
+							var savedOrNot = SendThingsToServerAfterAdd(string(ip_port), "Add:"+lastHash)
 							if savedOrNot == false{
 								fmt.Println("Haven't completely added the files. Only stored in local repo!")
 							} else if savedOrNot == true {
