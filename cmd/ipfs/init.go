@@ -160,10 +160,6 @@ environment variable:
 			res.SetError(err, cmdkit.ErrNormal)
 			return
 		}
-
-		//add by Nigel start: add print
-		fmt.Println("init:success")
-		//add by Nigel end
 	},
 }
 
