@@ -16,8 +16,7 @@ import (
 const (
 	Ip = "127.0.0.1"
 	Port = "30004"
-	MaxInitNum = 300
-	MaxAddNum = 100
+	MaxNum = 500
 
 
 	DBuserName = "root"
@@ -70,7 +69,7 @@ func main() {
 		os.Exit(0)
 	}
 	defer listen.Close()
-	listen = LimitListener(listen, MaxAddNum)
+	listen = LimitListener(listen, MaxNum)
 	fmt.Println("finish initialization, waiting for clients...")
 	Server(listen)
 }

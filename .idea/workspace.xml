@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8ed57d6d-f0e8-4d7c-8a29-c2512603935f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/listeners/HDFSServerListener.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/listeners/add.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/listeners/listen_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/listeners/HDFSServerListener.go" beforeDir="false" afterPath="$PROJECT_DIR$/listeners/HDFSServerListener.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,12 +40,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="13" />
-          <entry key="go" value="5575" />
+          <entry key="go" value="5586" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="5575" />
+          <entry key="Go" value="5586" />
           <entry key="PLAIN_TEXT" value="13" />
         </counts>
       </usages-collector>
@@ -63,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/listeners/HDFSServerListener.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="158" column="16" selection-start-line="158" selection-start-column="16" selection-end-line="158" selection-end-column="16" />
+            <state relative-caret-position="175">
+              <caret line="18" column="10" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="10" />
               <folding>
                 <element signature="e#14#111#0" expanded="true" />
                 <element signature="e#2412#3357#0" />
@@ -311,8 +307,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/listeners/HDFSServerListener.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="158" column="16" selection-start-line="158" selection-start-column="16" selection-end-line="158" selection-end-column="16" />
+        <state relative-caret-position="175">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="10" />
           <folding>
             <element signature="e#14#111#0" expanded="true" />
             <element signature="e#2412#3357#0" />
