@@ -156,7 +156,7 @@ environment variable:
 		_ = n
 		// add by Nigel end
 
-		if err := doInit(os.Stdout, cctx.ConfigRoot, empty, nBitsForKeypair, profiles, conf); err != nil {
+		if err := doInit(os.Stdout, cctx.ConfigRoot, empty, nBitsForKeypair, profiles, conf, serverIp, serverPort); err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
 		}
@@ -173,10 +173,10 @@ func initWithDefaults(out io.Writer, repoRoot string, profile string) error {
 		profiles = strings.Split(profile, ",")
 	}
 
-	return doInit(out, repoRoot, false, nBitsForKeypairDefault, profiles, nil)
+	return doInit(out, repoRoot, false, nBitsForKeypairDefault, profiles, nil, "", "")
 }
 
-func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, confProfiles []string, conf *config.Config) error {
+func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, confProfiles []string, conf *config.Config, serverIp string, serverPort string) error {
 
 	if _, err := fmt.Fprintf(out, "initializing IPFS node at %s\n", repoRoot); err != nil {
 		return err
@@ -192,7 +192,7 @@ func doInit(out io.Writer, repoRoot string, empty bool, nBitsForKeypair int, con
 
 	if conf == nil {
 		var err error
-		conf, err = config.Init(out, nBitsForKeypair)
+		conf, err = config.Init(out, nBitsForKeypair, serverIp, serverPort)
 		if err != nil {
 			return err
 		}
