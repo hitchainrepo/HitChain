@@ -24,8 +24,10 @@ const (
 	DBip = "127.0.0.1"
 	DBport = "3306"
 	DBName = "HDFS"
+	TableName = "clients"
 
 )
+
 
 // LimitListener returns a Listener that accepts at most n simultaneous connections from the provided listener
 func LimitListener(l net.Listener, n int) net.Listener {
@@ -123,9 +125,25 @@ func Server(listen net.Listener) {
 				// add by Nigel end
 				path := strings.Join([]string{DBuserName, ":", DBpassword, "@tcp(", DBip, ":", DBport, ")/", DBName, "?charset=utf8"}, "")
 				db, err := sql.Open("mysql", path)
+				defer db.Close()
 				if err != nil {
 					conn.Write([]byte(response))
 					panic(err.Error())
+				}
+				_, err = db.Query("select id from " + TableName + " limit 1")
+				if err != nil {
+					sql := "CREATE TABLE " + TableName +
+						" (" +
+						"`id` int(11) NOT NULL AUTO_INCREMENT, " +
+						"`hash_id` varchar(255) DEFAULT NULL, " +
+						"`address` varchar(255) DEFAULT NULL, " +
+						"PRIMARY KEY (`id`)" +
+						") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"
+					_, err := db.Exec(sql)
+					if err != nil {
+						conn.Write([]byte(response))
+						panic(err.Error())
+					}
 				}
 				rows, err := db.Query("SELECT id FROM clients WHERE hash_id = ?", value)
 				if err != nil {
