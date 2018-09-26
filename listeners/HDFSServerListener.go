@@ -79,7 +79,6 @@ func main() {
 func handleOutput(line string) string {
 	var response string
 	line = strings.TrimSpace(line)
-	fmt.Println(line)
 	if line == "get:success"{
 		response = "success"
 	}else{
@@ -100,7 +99,7 @@ func Server(listen net.Listener) {
 		defer conn.Close()
 		go func() {
 			var response string = "error"
-			data := make([]byte, 1024)
+			data := make([]byte, 2048)
 			i, err := conn.Read(data)
 			if err != nil {
 				conn.Write([]byte(response))
@@ -112,6 +111,7 @@ func Server(listen net.Listener) {
 			colonIndex := strings.Index(receiveData, ":")
 			if colonIndex < 0 {
 				fmt.Println("the client send a wrong data from: " + conn.RemoteAddr().String())
+				conn.Write([]byte(response))
 				return
 			}
 			tmp := strings.Split(receiveData, ":")
@@ -155,7 +155,7 @@ func Server(listen net.Listener) {
 				for rows.Next() {
 					if err := rows.Scan(&existId); err != nil {
 						conn.Write([]byte(response))
-						panic(err)
+						return
 					}
 				}
 				if existId > 0 {
@@ -175,6 +175,41 @@ func Server(listen net.Listener) {
 				// add by Nigel start: judge whether received a correct hash id
 				
 				// add by Nigel end
+				path := strings.Join([]string{DBuserName, ":", DBpassword, "@tcp(", DBip, ":", DBport, ")/", DBName, "?charset=utf8"}, "")
+				db, err := sql.Open("mysql", path)
+				defer db.Close()
+
+				// add by Nigel start: check whether user hash_id exists
+				underLineIndex := strings.Index(receiveData, "_")
+				if underLineIndex < 0 {
+					fmt.Println("the client send a wrong data from: " + conn.RemoteAddr().String())
+					conn.Write([]byte(response))
+					return
+				}
+				tmp = strings.Split(value, "_")
+				value = tmp[0]
+				peerId := tmp[1]
+				rows, err := db.Query("SELECT id FROM clients WHERE hash_id = ?", peerId)
+				if err != nil {
+					conn.Write([]byte(response))
+					fmt.Println(err)
+					return
+				}
+				var existId int
+				defer rows.Close()
+				for rows.Next() {
+					if err := rows.Scan(&existId); err != nil {
+						conn.Write([]byte(response))
+						return
+					}
+				}
+				if existId <= 0 {
+					conn.Write([]byte(response))
+					fmt.Println("client: " + conn.RemoteAddr().String() + " hasn't bind to this server!")
+					return
+				}
+				// add by Nigel end
+
 				command := "ipfs get " + value + " --output=repos/" + value
 				cmd := exec.Command("/bin/bash", "-c", command)
 				stdout, err := cmd.StdoutPipe()
