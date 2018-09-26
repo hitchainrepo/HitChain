@@ -514,7 +514,6 @@ You can now check what blocks have been created by:
 							}
 							config := ReadFile(filepath.Join(repoPath, "config"))
 							if config == "error" {
-								fmt.Println("in line 516")
 								fmt.Println("Haven't completely added the files. Only stored in local repo!")
 								break LOOP
 							}
