@@ -115,10 +115,10 @@ func defaultRepo(dstore repo.Datastore) (repo.Repo, error) {
 	}
 
 	// add by Nigel start: change default BootstrapAddress to new one
-	//c.Bootstrap = cfg.DefaultBootstrapAddresses
-	c.Bootstrap = []string{
-		"/ip4/47.105.76.115/tcp/4001/ipfs/QmTXvThuPMHgQyALXVKQYkeaFeMEdA9sQKK6CSqo1Qa7yy",
-	}
+	c.Bootstrap = cfg.DefaultBootstrapAddresses
+	//c.Bootstrap = []string{
+	//	"/ip4/47.105.76.115/tcp/4001/ipfs/QmTXvThuPMHgQyALXVKQYkeaFeMEdA9sQKK6CSqo1Qa7yy",
+	//}
 	fmt.Println(c.Bootstrap)
 	// add by Nigel end
 	c.Addresses.Swarm = []string{"/ip4/0.0.0.0/tcp/4001"}

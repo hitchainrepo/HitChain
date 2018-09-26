@@ -1,12 +1,15 @@
 package commands
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	"io"
 	"io/ioutil"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/ipfs/go-ipfs/core"
@@ -80,7 +83,7 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 	}
 	conn.Write([]byte(content))
 	//fmt.Println("finish sending messages to server!")
-	var response = make([]byte, 1024)
+	var response = make([]byte, 2048)
 	var count = 0
 	for {
 		count, err = conn.Read(response)
@@ -94,6 +97,34 @@ func SendThingsToServerAfterAdd(ip_port string, content string) bool {
 			}
 		}
 	}
+}
+// add by Nigel end
+
+
+// add by Nigel start: read File
+func ReadFile(filename string) (string){
+	f, err := ioutil.ReadFile(filename)
+	if err != nil {
+		//fmt.Println("read fail", err)
+		return "error"
+	}
+	return string(f)
+}
+// add by Nigel end
+
+
+// add by Nigel start: get repo path
+func getRepoPath(req *cmds.Request) (string, error) {
+	repoOpt, found := req.Options["config"].(string)
+	if found && repoOpt != "" {
+		return repoOpt, nil
+	}
+
+	repoPath, err := fsrepo.BestKnownPath()
+	if err != nil {
+		return "", err
+	}
+	return repoPath, nil
 }
 // add by Nigel end
 
@@ -175,6 +206,7 @@ You can now check what blocks have been created by:
 		cmdkit.IntOption(inlineLimitOptionName, "Maximum block size to inline. (experimental)").WithDefault(32),
 	},
 	PreRun: func(req *cmds.Request, env cmds.Environment) error {
+
 		quiet, _ := req.Options[quietOptionName].(bool)
 		quieter, _ := req.Options[quieterOptionName].(bool)
 		quiet = quiet || quieter
@@ -195,6 +227,7 @@ You can now check what blocks have been created by:
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
 		n, err := cmdenv.GetNode(env)
+
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -205,6 +238,7 @@ You can now check what blocks have been created by:
 			res.SetError(err, cmdkit.ErrNormal)
 			return
 		}
+
 		// check if repo will exceed storage limit if added
 		// TODO: this doesn't handle the case if the hashed file is already in blocks (deduplicated)
 		// TODO: conditional GC is disabled due to it is somehow not possible to pass the size to the daemon
@@ -409,6 +443,7 @@ You can now check what blocks have been created by:
 	},
 	PostRun: cmds.PostRunMap{
 		cmds.CLI: func(req *cmds.Request, re cmds.ResponseEmitter) cmds.ResponseEmitter {
+
 			reNext, res := cmds.NewChanResponsePair(req)
 
 			outChan := make(chan interface{})
@@ -469,7 +504,31 @@ You can now check what blocks have been created by:
 							// add by Nigel start: read remote ip address and send the last hash to the remote ip address
 							ip_port, err := ioutil.ReadFile(ClientFilePath)
 							Check(err)
-							var savedOrNot = SendThingsToServerAfterAdd(string(ip_port), "Add:"+lastHash)
+
+							// read peer id start
+							repoPath, err := getRepoPath(req)
+							if err != nil {
+								fmt.Println("in line 510")
+								fmt.Println("Haven't completely added the files. Only stored in local repo!")
+								break LOOP
+							}
+							config := ReadFile(filepath.Join(repoPath, "config"))
+							if config == "error" {
+								fmt.Println("in line 516")
+								fmt.Println("Haven't completely added the files. Only stored in local repo!")
+								break LOOP
+							}
+							var mapResult map[string]interface{}
+							if err := json.Unmarshal([]byte(config), &mapResult); err != nil {
+								panic(err)
+							}
+							tmp := mapResult["Identity"]
+							tmp2 := tmp.(map[string]interface{})
+							peerId := tmp2["PeerID"].(string)
+							//fmt.Println("peer id: " + peerId)
+							// read peer id end
+
+							var savedOrNot = SendThingsToServerAfterAdd(string(ip_port), "Add:"+lastHash+"_"+peerId)
 							if savedOrNot == false{
 								fmt.Println("Haven't completely added the files. Only stored in local repo!")
 							} else if savedOrNot == true {
