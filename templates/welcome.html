@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+{#    <link href="/static/bootstrap/css/dashboard.css" rel="stylesheet">#}
+
+    <script src="/static/bootstrap/js/jquery-3.2.1.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+{#    <script src="/static/bootstrap/js/holder.min.js"></script>#}
+
+    <meta charset="UTF-8">
+    <title>Hit Chain</title>
+</head>
+<body>
+
+{#    顶部导航#}
+{% include "header.html" %}
+{#    顶部导航 over#}
+
+    {# 判断是不是已经登录了 #}
+    {% if request.user.is_authenticated %}
+        {# 表示用户已经登录了 #}
+        <div class="container">
+            <button type="button" class="btn btn-info">You are {{ request.user.username }}</button>
+        </div>
+
+    {% else %}
+
+        <a id="jump_login" onclick="jump_login()"></a>
+
+    {% endif %}
+
+
+    <div class="container">
+        <button type="button" class="btn btn-success btn-lg" onclick="choose(1)">从头标注</button>
+        <button type="button" class="btn btn-danger btn-lg" onclick="choose(1)">继续之前的标注</button>
+    </div>
+
+    {% include "footer.html" %}
+
+</body>
+
+<script type="application/javascript">
+
+    function choose(id){
+        url = "/evaluate_noise_reduction?id="+id;
+        window.location.href=url;
+    }
+
+</script>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+{#    <link href="/static/bootstrap/css/dashboard.css" rel="stylesheet">#}
+
+    <script src="../static/bootstrap/js/jquery-3.2.1.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+{#    <script src="/static/bootstrap/js/holder.min.js"></script>#}
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {# 判断是不是已经登录了 #}
+    {% if request.user.is_authenticated %}
+        {# 表示用户已经登录了 #}
+        <div class="container">
+            <button type="button" class="btn btn-info">You are {{ request.user.username }}</button>
+        </div>
+
+    {% else %}
+
+        <a id="jump_login" onclick="jump_login()"></a>
+
+    {% endif %}
+
+
+    <div class="container">
+        <table class="table table-condensed" style="width: 100%;">
+            <tr>
+                <td align="right">id</td>
+                <td align="center"><textarea style="width: 800px; height: 30px;">{{ evaluation_noise_reduction_random_item.id }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td align="right">api_id</td>
+                <td align="center"><textarea style="width: 800px; height: 30px;">{{ evaluation_noise_reduction_random_item.api_id }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td align="right">code</td>
+                <td align="center"><textarea style="width: 800px; height: 450px;">{{ evaluation_noise_reduction_random_item.code }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td align="right">comment</td>
+                <td align="center"><textarea style="width: 800px; height: 150px;">{{ evaluation_noise_reduction_random_item.comment }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td align="center">
+                    {% if evaluation_noise_reduction_random_result_item is not None and evaluation_noise_reduction_random_result_item.result == 1 %}
+                        <button type="button" disabled="disabled" class="btn btn-success btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 1)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                        <button type="button" class="btn btn-danger btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 0)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    {% elif evaluation_noise_reduction_random_result_item is not None and evaluation_noise_reduction_random_result_item.result == 0 %}
+                        <button type="button" class="btn btn-success btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 1)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                        <button type="button" disabled="disabled" class="btn btn-danger btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 0)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    {% else %}
+                        <button type="button" class="btn btn-success btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 1)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                        <button type="button" class="btn btn-danger btn-lg" onclick="submit({{ evaluation_noise_reduction_random_item.id }}, 0)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    {% endif %}
+                </td>
+            </tr>
+
+
+
+            <tr>
+                <td></td>
+                <td align="center">
+                    <!-- Button trigger modal -->
+                    <a href="{% url 'evaluate_noise_reduction' %}?id={{ evaluation_noise_reduction_random_item.id|add:-1 }}" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                        页码跳转
+                    </button>
+
+                    <!-- Button trigger modal -->
+                    <a href="{% url 'evaluate_noise_reduction' %}?id={{ evaluation_noise_reduction_random_item.id|add:1 }}" aria-label="Later">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </a>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">跳转到哪个id</h4>
+                            </div>
+                            <div class="modal-body">
+                                <input id="jump_id" type="text" class="form-control" placeholder="id" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="btn_jump()">跳转</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script type="application/javascript">
+    function btn_jump(){
+        var id = $('#jump_id').val();
+        var url = "/evaluate_noise_reduction?id="+id;
+        window.location.href=url;
+    }
+
+    function jump_login(){
+        url = "/admin/login?next=/welcome";
+        window.location.href=url;
+    }
+
+    $(function(){
+        $("#jump_login").click();
+    });
+
+    function submit(id, result){
+        url = "/evaluate_noise_reduction_submit?id="+id+"&result="+result;
+        window.location.href=url;
+    }
+</script>
+
+</html>
