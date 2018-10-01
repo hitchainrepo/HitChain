@@ -11,6 +11,10 @@ from BackEnd.utils import *
 
 def welcome(request):
     username = request.user.username
+    if username:
+        repos = Repo.objects.filter(username=username)
+    else:
+        repos = []
     return render(request, "welcome.html", locals())
 
 def test(request):
@@ -87,5 +91,5 @@ def newRepo(request):
         repoItem.ipfs_hash = "QmdfYLM2jQRF6EMWNQwbMeTmqrxw1YAFA4ithj6KctVRZ8" # the hash value of README file
         repoItem.create_time = getCurrentTime()
         Repo.save(repoItem)
-        print("this is a form")
+        return redirect("/")
     return render(request, 'new.html')
