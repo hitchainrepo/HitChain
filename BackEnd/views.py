@@ -122,3 +122,23 @@ def showAuth(request):
         if auth.user_type == "owner":
             ownerDev = auth.username
     return render(request, "authority.html", locals())
+
+def addAuth(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        repoId = request.POST.get('repoId')
+
+        authItem = Authority()
+        authItem.username = username
+        authItem.repo_id = repoId
+        authItem.create_time = getCurrentTime()
+        authItem.user_type = "core"
+        Authority.save(authItem)
+
+        return redirect("/showAuth?repoId=" + repoId)
+    else:
+        repoId = request.GET.get("repoId")
+    return render(request, 'addAuth.html', locals())
+
+def removeAuth(request):
+    return render(request, 'authority.html', locals())

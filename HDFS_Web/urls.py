@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'newRepo/', newRepo, name='newRepo'),
     url(r'pushRepo/', pushRepo, name='pushRepo'),
     url(r'showAuth/', showAuth, name='showAuth'),
+    url(r'addAuth/', addAuth, name='addAuth'),
+    url(r'removeAuth/', removeAuth, name='removeAuth'),
 ]

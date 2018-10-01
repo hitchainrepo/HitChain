@@ -31,14 +31,14 @@
                         <div class="list-group-item">
                             <span class="text-left text-danger">Core Developers</span>
                             {% if request.user.username in coreDevs %}
-                                <a class="text-danger" href="addAuth"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
+                                <a class="text-danger" href="/addAuth?repoId={{ repoId }}"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
                             {% endif %}
                         </div>
                         {% for auth in auths %}
                             <div class="list-group-item">
                                 <span class="text-left text-muted">{{ auth.username }}</span>
                                 {% if request.user.username == ownerDev %}
-                                    <a class="text-danger" href="addAuth"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></a>
+                                    <a class="text-muted" href="removeAuth"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></a>
                                 {% endif %}
                             </div>
                         {% endfor %}
