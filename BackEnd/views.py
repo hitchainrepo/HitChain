@@ -141,4 +141,10 @@ def addAuth(request):
     return render(request, 'addAuth.html', locals())
 
 def removeAuth(request):
-    return render(request, 'authority.html', locals())
+    repoId = request.GET.get("repoId")
+    username = request.GET.get("username")
+    owner = request.user.username
+    ownerItem = Authority.objects.filter(repo_id=repoId, username=owner)
+    if ownerItem and ownerItem[0].user_type == "owner":
+        Authority.objects.filter(repo_id=repoId, username=username).delete()
+    return redirect('/showAuth?repoId=' + repoId)
