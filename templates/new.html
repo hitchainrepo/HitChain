@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/bootstrap/js/jquery-3.2.1.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>New Repo</title>
+
+    <style>
+        .table tr, td {
+            border: 0px solid transparent !important;
+        }
+    </style>
+
+</head>
+<body>
+    {% include "header.html" %}
+
+    {% if request.user.is_authenticated %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>Create a new repository</h2>
+
+                    <h5 class="page-header"></h5>
+
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-0">
+                            <label for="username">Owner</label>
+                        </div>
+                        <div class="col-md-3 col-md-offset-1">
+                            <label for="reponame">Repository Name</label>
+                        </div>
+                    </div>
+
+                    <form action="{% url 'newRepo' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-0">
+                                <input type="text" class="form-control" name="username" id="username" readonly="readonly" value="{{ request.user.username }}" />
+                            </div>
+
+                            <div class="col-md-3 col-md-offset-1">
+                                <input type="text" class="form-control" name="reponame" id="reponame" />
+                            </div>
+
+                            <div class="col-md-1 col-md-offset-1">
+                                <button type="submit" class="btn btn-default">创建项目</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <a id="jump_login" onclick="jump_login()"></a>
+    {% endif %}
+
+    {% include "footer.html" %}
+
+<script type="application/javascript">
+
+    $(function(){
+        $("#jump_login").click();
+    });
+
+    function jump_login(){
+        url = "/login";
+        window.location.href=url;
+    }
+
+</script>
+</body>
+</html>

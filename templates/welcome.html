@@ -25,7 +25,23 @@
     {% if request.user.is_authenticated %}
         {# 表示用户已经登录了 #}
         <div class="container">
-            <button type="button" class="btn btn-info">You are {{ request.user.username }}</button>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-left text-danger">Repositories</span>
+                            <a class="text-danger" href="newRepo"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
+                        </div>
+                        <a href="#" class="list-group-item">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                        <a href="#" class="list-group-item">Morbi leo risus</a>
+                        <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                        <a href="#" class="list-group-item">Vestibulum at eros</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
     {% else %}
@@ -34,20 +50,18 @@
 
     {% endif %}
 
-
-    <div class="container">
-        <button type="button" class="btn btn-success btn-lg" onclick="choose(1)">从头标注</button>
-        <button type="button" class="btn btn-danger btn-lg" onclick="choose(1)">继续之前的标注</button>
-    </div>
-
     {% include "footer.html" %}
 
 </body>
 
 <script type="application/javascript">
 
-    function choose(id){
-        url = "/evaluate_noise_reduction?id="+id;
+    $(function(){
+        $("#jump_login").click();
+    });
+
+    function jump_login(){
+        url = "/login";
         window.location.href=url;
     }
 

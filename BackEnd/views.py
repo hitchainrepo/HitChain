@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from BackEnd.models import UserForm
+from BackEnd.models import *
+from BackEnd.utils import *
 
 
 def welcome(request):
@@ -73,3 +74,18 @@ def logout_view(request):
     #清理cookie里保存username
     auth.logout(request)
     return redirect('/')
+
+
+@csrf_exempt
+def newRepo(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        reponame = request.POST.get('reponame')
+        repoItem = Repo()
+        repoItem.username = username
+        repoItem.reponame = reponame
+        repoItem.ipfs_hash = "QmdfYLM2jQRF6EMWNQwbMeTmqrxw1YAFA4ithj6KctVRZ8" # the hash value of README file
+        repoItem.create_time = getCurrentTime()
+        Repo.save(repoItem)
+        print("this is a form")
+    return render(request, 'new.html')
