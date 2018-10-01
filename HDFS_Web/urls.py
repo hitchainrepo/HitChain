@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'logout/', logout_view),
     url(r'register/', register_view,name='register'),
     url(r'newRepo/', newRepo, name='newRepo'),
+    url(r'pushRepo/', pushRepo, name='pushRepo'),
+    url(r'showAuth/', showAuth, name='showAuth'),
 ]

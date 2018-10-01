@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+{#    <link href="/static/bootstrap/css/dashboard.css" rel="stylesheet">#}
+
+    <script src="/static/bootstrap/js/jquery-3.2.1.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+{#    <script src="/static/bootstrap/js/holder.min.js"></script>#}
+
+    <meta charset="UTF-8">
+    <title>Authority</title>
+</head>
+<body>
+
+{#    顶部导航#}
+{% include "header.html" %}
+{#    顶部导航 over#}
+
+    {# 判断是不是已经登录了 #}
+    {% if request.user.is_authenticated %}
+        {# 表示用户已经登录了 #}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-left text-danger">Core Developers</span>
+                            {% if request.user.username in coreDevs %}
+                                <a class="text-danger" href="addAuth"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
+                            {% endif %}
+                        </div>
+                        {% for auth in auths %}
+                            <div class="list-group-item">
+                                <span class="text-left text-muted">{{ auth.username }}</span>
+                                {% if request.user.username == ownerDev %}
+                                    <a class="text-danger" href="addAuth"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        <a id="jump_login" onclick="jump_login()"></a>
+
+    {% endif %}
+
+    {% include "footer.html" %}
+
+</body>
+
+<script type="application/javascript">
+
+    $(function(){
+        $("#jump_login").click();
+    });
+
+    function jump_login(){
+        url = "/login";
+        window.location.href=url;
+    }
+
+</script>
+</html>

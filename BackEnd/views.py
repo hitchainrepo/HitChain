@@ -89,7 +89,36 @@ def newRepo(request):
         repoItem.username = username
         repoItem.reponame = reponame
         repoItem.ipfs_hash = "QmdfYLM2jQRF6EMWNQwbMeTmqrxw1YAFA4ithj6KctVRZ8" # the hash value of README file
-        repoItem.create_time = getCurrentTime()
-        Repo.save(repoItem)
+        currentTime = getCurrentTime()
+        repoItem.create_time = currentTime
+        repoItem.save()
+
+        authItem = Authority()
+        authItem.username = username
+        authItem.repo_id = repoItem.id
+        authItem.create_time = currentTime
+        authItem.user_type = "owner"
+        Authority.save(authItem)
+
         return redirect("/")
     return render(request, 'new.html')
+
+
+def pushRepo(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        reponame = request.POST.get('reponame')
+        ipfsHash = request.POST.get('ipfsHash')
+
+
+def showAuth(request):
+    repoId = request.GET.get('repoId')
+    auths = Authority.objects.filter(repo_id=repoId)
+    coreDevs = []
+    ownerDev = None
+    for auth in auths:
+        coreDevs.append(auth.username)
+        if auth.user_type == "owner":
+            ownerDev = auth.username
+    return render(request, "authority.html", locals())

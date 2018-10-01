@@ -7,6 +7,18 @@ class Repo(models.Model):
     create_time = models.DateTimeField()
 
     def __str__(self):
-        return self.reponame
+        return self.username
     class Meta:
         db_table = "repo"
+
+
+class Authority(models.Model):
+    username = models.CharField(max_length=255)
+    repo_id = models.IntegerField()
+    user_type = models.CharField(max_length=255, default="owner")
+    create_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.username
+    class Meta:
+        db_table = "authority"
