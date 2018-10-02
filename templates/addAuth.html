@@ -9,20 +9,13 @@
 
 
     <style type="text/css">
-	#mydiv{
-		position:absolute;
-		left:50%;
-		top:50%;
-		margin-left:-200px;
-		margin-top:-50px;
-	}
 	.mouseOver{
-		background:#708090;
-		color:#fffafa;
+		background:#f2f2f2;
+		color:#434343;
 	}
 	.mouseOut{
-		background:#fffafa;
-		color:#000000;
+		background:#ffffff;
+		color:#434343;
 	}
 </style>
 <script>
@@ -109,8 +102,8 @@
 			var tr = document.createElement("tr");
 			var td = document.createElement("td");
 			td.setAttribute("border",0);
-			td.setAttribute("bgcolor","#fffafa");
-			td.setAttribute("size","50");
+			td.setAttribute("bgcolor","#ffffff");
+			td.setAttribute("size","500");
 			td.onmouseover=function(){
 				this.className='mouseOver';
 			};
@@ -159,12 +152,12 @@
 	function setLocation(){
 		//关联位置显示位置与输入框一直
 		var content = document.getElementById("keyword");
-		var width = content.offsetWidth-2;  //input width
+		var width = content.offsetWidth;  //input width
 		var left = content["offsetLeft"]; //距左边框的距离
 		var top = content["offsetTop"]+content.height; //到顶部的距离
 		//获得显示数据的div
 		var popDiv = document.getElementById("popDiv");
-		popDiv.style.border = "black 1px solid";
+		popDiv.style.border = "#BABABA 0px solid";
 		popDiv.style.left = left + "px";
 		popDiv.style.top = top + "px";
 		popDiv.style.width = width + "px";
@@ -180,7 +173,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <form class="form-inline" action="{% url 'addAuth' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                <form class="form" action="{% url 'addAuth' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                  {% csrf_token %}
                   <div class="form-group">
                     <label for="username">昵称</label>
@@ -188,17 +181,16 @@
                                 onkeyup="getMoreContents()" onblur="keywordBlur()" onfocus="keywordFocus()" />
                   </div>
                     <input type="text" name="repoId" id="repoId" value="{{ repoId }}" hidden="hidden" />
+
+                    <div id="popDiv" class="form-group">
+                        <table id="content_table">
+                            <tbody id="content_table_body">
+                            <!-- 动态查询出来的数据显示的地方 -->
+                            </tbody>
+                        </table>
+                    </div>
                   <button type="submit" class="btn btn-default">立即添加</button>
                 </form>
-
-                <div id="popDiv">
-                    <table id="content_table" bgcolor="#fffafa" border="0" cellspacing="0"
-                    cellpadding="0" >
-                        <tbody id="content_table_body">
-                        <!-- 动态查询出来的数据显示的地方 -->
-                        </tbody>
-                    </table>
-                </div>
 
             </div>
         </div>

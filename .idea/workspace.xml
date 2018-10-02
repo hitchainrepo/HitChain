@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1c6a811b-bbe0-4adf-91c2-1f93971fcafe" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BackEnd/views.py" afterPath="$PROJECT_DIR$/BackEnd/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HDFS_Web/urls.py" afterPath="$PROJECT_DIR$/HDFS_Web/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/addAuth.html" afterPath="$PROJECT_DIR$/templates/addAuth.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/header.html" afterPath="$PROJECT_DIR$/templates/header.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/welcome.html" afterPath="$PROJECT_DIR$/templates/welcome.html" />
     </list>
     <ignored path="HDFS_Web.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BackEnd/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="151" column="38" selection-start-line="151" selection-start-column="38" selection-end-line="151" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.527027">
+              <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
               <folding>
                 <element signature="e#24#55#0" expanded="true" />
               </folding>
@@ -73,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addAuth.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="addAuth.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/addAuth.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25699747">
-              <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
+            <state vertical-scroll-proportion="-5.647059">
+              <caret line="105" column="39" selection-start-line="105" selection-start-column="39" selection-end-line="105" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -126,8 +123,8 @@
         <option value="$PROJECT_DIR$/templates/header.html" />
         <option value="$PROJECT_DIR$/templates/welcome.html" />
         <option value="$PROJECT_DIR$/HDFS_Web/urls.py" />
-        <option value="$PROJECT_DIR$/BackEnd/views.py" />
         <option value="$PROJECT_DIR$/templates/addAuth.html" />
+        <option value="$PROJECT_DIR$/BackEnd/views.py" />
       </list>
     </option>
   </component>
@@ -904,13 +901,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BackEnd/views.py">
+    <entry file="file://$PROJECT_DIR$/static/bootstrap/css/bootstrap.min.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="151" column="38" selection-start-line="151" selection-start-column="38" selection-end-line="151" selection-end-column="38" />
-          <folding>
-            <element signature="e#24#55#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.35238096">
+          <caret line="4" column="37517" selection-start-line="4" selection-start-column="37505" selection-end-line="4" selection-end-column="37517" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/addAuth.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.647059">
+          <caret line="105" column="39" selection-start-line="105" selection-start-column="39" selection-end-line="105" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -922,11 +925,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/addAuth.html">
+    <entry file="file://$PROJECT_DIR$/BackEnd/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25699747">
-          <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
-          <folding />
+        <state vertical-scroll-proportion="0.527027">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding>
+            <element signature="e#24#55#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

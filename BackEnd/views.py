@@ -157,7 +157,7 @@ def removeAuth(request):
 
 def searchUsername(request):
     query = request.GET['q']
-    items = Authority.objects.filter(username__contains=query)
+    items = User.objects.filter(username__contains=query)
     result = []
     for item in items:
         result.append(item.username)
