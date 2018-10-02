@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'showAuth/', showAuth, name='showAuth'),
     url(r'addAuth/', addAuth, name='addAuth'),
     url(r'removeAuth/', removeAuth, name='removeAuth'),
+    url(r'ajaxSearchUsername/', searchUsername, name='searchUsername')
 ]

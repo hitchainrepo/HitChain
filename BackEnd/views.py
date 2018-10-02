@@ -2,11 +2,14 @@
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from BackEnd.models import *
 from BackEnd.utils import *
+
+import json
 
 
 def welcome(request):
@@ -148,3 +151,14 @@ def removeAuth(request):
     if ownerItem and ownerItem[0].user_type == "owner":
         Authority.objects.filter(repo_id=repoId, username=username).delete()
     return redirect('/showAuth?repoId=' + repoId)
+
+
+
+
+def searchUsername(request):
+    query = request.GET['q']
+    items = Authority.objects.filter(username__contains=query)
+    result = []
+    for item in items:
+        result.append(item.username)
+    return HttpResponse(json.dumps(result), content_type='application/json')

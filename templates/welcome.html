@@ -33,7 +33,7 @@
                             <a class="text-danger" href="newRepo"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
                         </div>
                         {% for repo in repos %}
-                            <a href="showAuth?repoId={{ repo.id }}" class="list-group-item">{{ repo.reponame }}</a>
+                            <a href="/showAuth?repoId={{ repo.id }}" class="list-group-item">{{ repo.reponame }}</a>
                         {% endfor %}
                     </div>
                 </div>
