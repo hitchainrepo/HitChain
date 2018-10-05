@@ -6,6 +6,8 @@ import os
 import time
 from .classmodule import RemoteRepo, AccessControl
 from .funcmodule import *
+import urllib2
+import json
 
 
 def main():
@@ -80,21 +82,40 @@ def main():
             os.system("git update-server-info")
             os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
 
-            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            username = args[2]
+            password = args[3]
+            newRepoName = args[4]
+
+            response = os.popen("ipfs add -r .").read()
+            lastline = response.splitlines()[-1].lower()
+            if lastline != "added completely!":
+                print lastline
+                return
+            # newRepoHash = response.splitlines()[-1].split(" ")[1]
+            newRepoHash = response.splitlines()[-2].split(" ")[1]
             os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
             namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
             remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
 
-            accessControl = AccessControl(remoteHash)
-            accessControl.setKeyName(repoName)
-            # initial authority file
-            accessControl.initJson()
+            # connect to the webservice
+            url = "http://localhost:8000/newRepo?username=" + username + "&password=" + password + "&reponame=" + newRepoName + "&ipfsHash=" + newRepoHash
+            req = urllib2.Request(url)
+            res_data = urllib2.urlopen(req)
+            res = res_data.read().decode('utf-8')
+            res = json.loads(res)
+            if res["response"] != "success":
+                return
 
-            newRepoHash2 = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
-            namePublishCmd2 = "ipfs name publish --key=%s %s" % (repoName, newRepoHash2)
-            os.system(namePublishCmd2)
-
-            os.system("rm -rf %s/%s" % (projectLocation, repoName))
+            # accessControl = AccessControl(remoteHash)
+            # accessControl.setKeyName(repoName)
+            # # initial authority file
+            # accessControl.initJson()
+            #
+            # newRepoHash2 = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            # namePublishCmd2 = "ipfs name publish --key=%s %s" % (repoName, newRepoHash2)
+            # os.system(namePublishCmd2)
+            #
+            # os.system("rm -rf %s/%s" % (projectLocation, repoName))
         elif len(args) == 1:
             # TODO:
             # this method is not finish
