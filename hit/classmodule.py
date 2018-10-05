@@ -42,6 +42,34 @@ class RemoteRepo():
     def getRemoteFileHash(self):
         return self.remoteFileHash
 
+# class RemoteRepoPlatform():
+#     def __init__(self):
+#         return
+
+class config():
+    def __init__(self):
+        self.path = ".hit/config"
+
+    def initConfig(self,repoUrl):
+        import ConfigParser
+        cf = ConfigParser.ConfigParser()
+        cf.read(self.path)
+        cf.add_section("remote \"origin\"")
+        cf.set("remote \"origin\"","url",repoUrl)
+        with open(self.path, "w+") as f:
+            cf.write(f)
+
+    def getHitConfig(self):
+        import ConfigParser
+        cf = ConfigParser.ConfigParser()
+        cf.read(self.path)
+        return cf
+
+
+
+
+
+
 class AccessControl():
     # authority management
     def __init__(self,pathhash):
