@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'removeAuth/', removeAuth, name='removeAuth'),
     url(r'ajaxSearchUsername/', searchUsername, name='searchUsername'),
 
-    url(r'^webservice/', webservice),
+    url(r'^webservice/', webservice, name='webservice'),
+    # url(r'^webservice/', webservice),
 ]

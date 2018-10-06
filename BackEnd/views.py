@@ -11,16 +11,19 @@ from BackEnd.utils import *
 
 import json
 
+from django.http import HttpResponseNotAllowed
+from rest_framework.parsers import JSONParser
+from rest_framework import status
 
-from django.shortcuts import render,HttpResponse
-from spyne import Application,rpc,ServiceBase,Iterable,Integer,Unicode
-from spyne.protocol.soap import Soap11
-from spyne.server.wsgi import WsgiApplication
-from spyne import Iterable
-from spyne.protocol.xml import XmlDocument
-from spyne.server.django import DjangoApplication
-from django.views.decorators.csrf import csrf_exempt
-from xml.etree import ElementTree
+# from django.shortcuts import render,HttpResponse
+# from spyne import Application,rpc,ServiceBase,Iterable,Integer,Unicode
+# from spyne.protocol.soap import Soap11
+# from spyne.server.wsgi import WsgiApplication
+# from spyne import Iterable
+# from spyne.protocol.xml import XmlDocument
+# from spyne.server.django import DjangoApplication
+# from django.views.decorators.csrf import csrf_exempt
+# from xml.etree import ElementTree
 
 
 
@@ -208,72 +211,123 @@ def searchUsername(request):
         result.append(item.username)
     return HttpResponse(json.dumps(result), content_type='application/json')
 
-# add by Nigel start: webservice
-class HDFS(ServiceBase):
-    @rpc(Unicode, Unicode, Unicode, _returns=Iterable(Unicode))
-    def changeIpfsHash(ctx, username, password, repo):
 
-        responseList = {
-            "user": "username or password error",
-            "repo": "wrong repository",
-            "auth": "no authority",
-            "success": "success"
-        }
-
-        user = auth.authenticate(username=username, password=password)
-        dic = {"response":"user"}
-        if user:
-            if repo is None:
-                dic = {"response":responseList["repo"]}
+# add by Nigel start: RESTful API
+@csrf_exempt
+def webservice(request):
+    responseList = {
+        "user": "username or password error",
+        "repo": "wrong repository",
+        "auth": "no authority",
+        "success": "success",
+        "json": "data not in json format",
+        "request": "bad request",
+        "get": "do not support get request",
+    }
+    if request.method == 'POST':
+        try:
+            data = JSONParser().parse(request)
+            if "method" not in data:
+                content = {"response": responseList["request"]}
+                return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
             else:
-                index_left = repo.find("/")
-                if index_left < 0:
-                    dic = {"response":responseList["repo"]}
-                else:
-                    ownername = repo[:index_left]
-                    reponame = repo[index_left + 1:]
-                    ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
-                    if len(ownerItem) <= 0:
-                        dic = {"response":responseList["repo"]}
+                method = data["method"]
+                if method == "getIpfsHash":
+                    if "ownername" not in data or "reponame" not in data:
+                        content = {"response": responseList["request"]}
+                        return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
                     else:
-                        ownerItem = ownerItem[0]
-                        repoId = ownerItem.id
-                        authorityItem = Authority.objects.filter(repo_id=repoId, username=username)
-                        if authorityItem:
-                            dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
+                        ownername = data["ownername"]
+                        reponame = data["reponame"]
+                        ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
+                        if len(ownerItem) <= 0:
+                            content = {"response":responseList["repo"]}
+                            return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
                         else:
-                            dic = {"response":responseList["auth"]}
-        return HttpResponse(json.dumps(dic))
-
-    @rpc(Unicode, _returns=Iterable(Unicode))
-    def getIpfsHash(ctx, repo):
-        responseList = {
-            "repo": "wrong repository",
-            "success": "success"
-        }
-        dic = {"response":responseList["repo"]}
-        if repo is None:
-            dic = {"response":responseList["repo"]}
-        else:
-            index_left = repo.find("/")
-            if index_left < 0:
-                dic = {"response":responseList["repo"]}
-            else:
-                ownername = repo[:index_left]
-                reponame = repo[index_left + 1:]
-                ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
-                if len(ownerItem) <= 0:
-                    dic = {"response":responseList["repo"]}
+                            ownerItem = ownerItem[0]
+                            content = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
+                            return JsonResponse(data=content, status=status.HTTP_200_OK)
+                elif method == "changeIpfsHash":
+                    print("in change")
                 else:
-                    ownerItem = ownerItem[0]
-                    dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
-        return HttpResponse(json.dumps(dic))
+                    content = {"response":responseList["request"]}
+                    return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            content = {"response": responseList["json"]}
+            return JsonResponse(data=content, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    elif request.method == 'GET':
+        content = {'response': responseList["get"]}
+        return JsonResponse(data=content, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    return HttpResponseNotAllowed(permitted_methods=['POST'])
+# add by Nigel end
 
-application = Application([HDFS],
-    tns='spyne.examples.hello',
-    in_protocol=Soap11(validator='lxml'),
-    out_protocol=Soap11()
-)
 
-webservice = csrf_exempt(DjangoApplication(application))
-# add by Nigel end: webservice
+# # add by Nigel start: webservice
+# class HDFS(ServiceBase):
+#     @rpc(Unicode, Unicode, Unicode, _returns=Iterable(Unicode))
+#     def changeIpfsHash(ctx, username, password, repo):
+#
+#         responseList = {
+#             "user": "username or password error",
+#             "repo": "wrong repository",
+#             "auth": "no authority",
+#             "success": "success"
+#         }
+#
+#         user = auth.authenticate(username=username, password=password)
+#         dic = {"response":"user"}
+#         if user:
+#             if repo is None:
+#                 dic = {"response":responseList["repo"]}
+#             else:
+#                 index_left = repo.find("/")
+#                 if index_left < 0:
+#                     dic = {"response":responseList["repo"]}
+#                 else:
+#                     ownername = repo[:index_left]
+#                     reponame = repo[index_left + 1:]
+#                     ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
+#                     if len(ownerItem) <= 0:
+#                         dic = {"response":responseList["repo"]}
+#                     else:
+#                         ownerItem = ownerItem[0]
+#                         repoId = ownerItem.id
+#                         authorityItem = Authority.objects.filter(repo_id=repoId, username=username)
+#                         if authorityItem:
+#                             dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
+#                         else:
+#                             dic = {"response":responseList["auth"]}
+#         return HttpResponse(json.dumps(dic))
+#
+#     @rpc(Unicode, _returns=Iterable(Unicode))
+#     def getIpfsHash(ctx, repo):
+#         responseList = {
+#             "repo": "wrong repository",
+#             "success": "success"
+#         }
+#         dic = {"response":responseList["repo"]}
+#         if repo is None:
+#             dic = {"response":responseList["repo"]}
+#         else:
+#             index_left = repo.find("/")
+#             if index_left < 0:
+#                 dic = {"response":responseList["repo"]}
+#             else:
+#                 ownername = repo[:index_left]
+#                 reponame = repo[index_left + 1:]
+#                 ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
+#                 if len(ownerItem) <= 0:
+#                     dic = {"response":responseList["repo"]}
+#                 else:
+#                     ownerItem = ownerItem[0]
+#                     dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
+#         return HttpResponse(json.dumps(dic))
+#
+# application = Application([HDFS],
+#     tns='spyne.examples.hello',
+#     in_protocol=Soap11(validator='lxml'),
+#     out_protocol=Soap11()
+# )
+#
+# webservice = csrf_exempt(DjangoApplication(application))
+# # add by Nigel end: webservice

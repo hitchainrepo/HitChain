@@ -2,6 +2,8 @@ beautifulsoup4==4.6.0
 client==0.0.1
 Django==1.11.3
 django-crispy-forms==1.7.0
+django-filter==2.0.0
+djangorestframework==3.8.2
 entrypoints==0.2.3
 html5lib==0.9999999
 lxml==4.2.5
