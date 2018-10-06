@@ -48,8 +48,15 @@ class RemoteRepoPlatform():
         self.cf = Config().getHitConfig()
         self.repoUrl = self.cf.get("remote \"origin\"","repoUrl")
         self.repoName = self.cf.get("remote \"origin\"","repoName")
+        # 待补充真正的url获取IPFS地址
         repoIpfsUrl = self.repoUrl
         self.remoteIpfs = requests.get(repoIpfsUrl).json()
+        # TODO: UPDATE
+        self.updateIPFSurl = self.repoUrl
+
+    def verifiAuth(self,userName,pwd):
+        # TODO:
+        return True
 
 class Config():
     def __init__(self):

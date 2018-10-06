@@ -6,12 +6,11 @@ import os
 import time
 from .classmodule import *
 from .funcmodule import *
-<<<<<<< Updated upstream
 import urllib2
 import json
-=======
 import ConfigParser
->>>>>>> Stashed changes
+import getpass
+import requests
 
 
 def main():
@@ -19,25 +18,19 @@ def main():
     # print args
     if args[0] == 'push':
         projectLocation = os.getcwd()
-        remoteRepo = RemoteRepo()
-        # get remote ipns hash
-        remoteHash = remoteRepo.getRemoteHash()
-        # remoteUrl = remoteRepo.getRemoteUrl()
-        # get remote ipfs hash
-        remoteFileHash = remoteRepo.getRemoteFileHash()
 
-        # get authority file
-        os.system("ipfs get %s/%s" % (remoteFileHash,remoteHash))
-        accessControl = AccessControl(remoteHash)
-        accessControl.setKeyNameFromJson()
-        accessControl.getUserKey("self")
-        # judge authority
-        if accessControl.verifiAuth(accessControl.pubkey):
+        remoteRepo = RemoteRepoPlatform()
+        # get remote ipns hash
+        remoteHash = remoteRepo.remoteIpfs
+
+        username = input("user name: ")
+        pwd = getpass.getpass('password: ')
+        if remoteRepo.verifiAuth(username,pwd):
             # gen a key to store remote repo
             pathLocalRemoteRepo = genKey32()
             # download remote repo to local
             print "hit get ipfs repo to local"
-            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash,pathLocalRemoteRepo) # 要重命名
+            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteHash,pathLocalRemoteRepo) # 要重命名
             print ipfsGetRepoCmd
             os.system(ipfsGetRepoCmd)
             # push repo to downloaded remote repo
@@ -49,31 +42,34 @@ def main():
                 gitPushCmd += " " + arg
             os.system(gitPushCmd)
             # get timestamp (remoteTimeStamp) of the remote repo
-            print "compare local repo with remote repo"
-            remoteTimeStamp = os.popen("ipfs cat %s/timestamp" % remoteFileHash).read()
-            if remoteRepo.timeStamp == remoteTimeStamp:
-                os.chdir(pathLocalRemoteRepo)
-                # update git repo
-                os.system("git update-server-info")
-                # gen a timestamp file for new repo
-                os.system("echo " + repr(time.time()) + " > timestamp")
-                # add new repo to ipfs network
-                # use ipfs add -r .
-                print "add repo to ipfs network"
-                newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
-                # get ipfs hash of new add repo, and publish it to ipns
-                accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
-                print "publish file to ipns %s" % remoteHash
-                namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
-                os.system(namePublishCmd)
-                accessControl.deleteIPNSKey()
-            else:
-                print "Err: The remote repo has been updated by other user, please push the repo again."
+            # print "compare local repo with remote repo"
+            # remoteTimeStamp = os.popen("ipfs cat %s/timestamp" % remoteFileHash).read()
+            # if remoteRepo.timeStamp == remoteTimeStamp:
+            os.chdir(pathLocalRemoteRepo)
+            # update git repo
+            os.system("git update-server-info")
+            # gen a timestamp file for new repo
+            # os.system("echo " + repr(time.time()) + " > timestamp")
+            # add new repo to ipfs network
+            # use ipfs add -r .
+            # print "add repo to ipfs network"
+            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            # get ipfs hash of new add repo, and publish it to ipns
+            # accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
+            # print "publish file to ipns %s" % remoteHash
+            # namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
+            dataUpdate = {"username":username,"password":pwd,"reponame":remoteRepo.repoName}
+            updateRequest = requests.post(remoteRepo.updateIPFSurl, data=dataUpdate)
+            # os.system(namePublishCmd)
+            # accessControl.deleteIPNSKey()
+            # else:
+            #     print "Err: The remote repo has been updated by other user, please push the repo again."
             # rm temp local repo
+            print updateRequest
             os.chdir(projectLocation)
             os.system("rm -rf %s" % pathLocalRemoteRepo)
         else:
-            print "ERROR: You don't have permission to push your code to the repo"
+            print "ERROR: Access denied to push your code to the repo"
         os.system("rm %s" % remoteHash)
 
     elif args[0] == "transfer":
@@ -140,40 +136,40 @@ def main():
 
     # add user to authority file
     # use the public key of user
-    elif args[0] == 'add-user':
-        if len(args) == 2:
-            if os.access(args[1], os.F_OK):
-                projectLocation = os.getcwd()
-                remoteRepo = RemoteRepo()
-                remoteHash = remoteRepo.getRemoteHash()
-                remoteFileHash = remoteRepo.getRemoteFileHash()
-                pathLocalRemoteRepo = genKey32()
-                ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash, pathLocalRemoteRepo)
-                os.system(ipfsGetRepoCmd)
-                os.chdir(pathLocalRemoteRepo)
-                accessControl = AccessControl(remoteHash)
-                accessControl.setKeyNameFromJson()
-                accessControl.getUserKey("self")
-                # judge authority
-                if accessControl.verifiAuth(accessControl.pubkey):
-                    pubkey = readPublicKey(args[1])
-                    accessControl.addAdmin(pubkey)
-
-                    accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
-                    newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
-                    namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
-                    os.system(namePublishCmd)
-                    accessControl.deleteIPNSKey()
-                else:
-                    print "ERROR: You don't have permission to add admin."
-
-                os.chdir(projectLocation)
-                os.system("rm -rf %s" % pathLocalRemoteRepo)
-                # os.system("rm %s" % )
-            else:
-                print "ERROR: The path doesn't exist."
-        else:
-            print "ERROR: Please enter a path to the public key of user."
+    # elif args[0] == 'add-user':
+    #     if len(args) == 2:
+    #         if os.access(args[1], os.F_OK):
+    #             projectLocation = os.getcwd()
+    #             remoteRepo = RemoteRepo()
+    #             remoteHash = remoteRepo.getRemoteHash()
+    #             remoteFileHash = remoteRepo.getRemoteFileHash()
+    #             pathLocalRemoteRepo = genKey32()
+    #             ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash, pathLocalRemoteRepo)
+    #             os.system(ipfsGetRepoCmd)
+    #             os.chdir(pathLocalRemoteRepo)
+    #             accessControl = AccessControl(remoteHash)
+    #             accessControl.setKeyNameFromJson()
+    #             accessControl.getUserKey("self")
+    #             # judge authority
+    #             if accessControl.verifiAuth(accessControl.pubkey):
+    #                 pubkey = readPublicKey(args[1])
+    #                 accessControl.addAdmin(pubkey)
+    #
+    #                 accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
+    #                 newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+    #                 namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
+    #                 os.system(namePublishCmd)
+    #                 accessControl.deleteIPNSKey()
+    #             else:
+    #                 print "ERROR: You don't have permission to add admin."
+    #
+    #             os.chdir(projectLocation)
+    #             os.system("rm -rf %s" % pathLocalRemoteRepo)
+    #             # os.system("rm %s" % )
+    #         else:
+    #             print "ERROR: The path doesn't exist."
+    #     else:
+    #         print "ERROR: Please enter a path to the public key of user."
 
     # the process of add user
     # 判断args[2]是否为公钥路径：
@@ -185,39 +181,39 @@ def main():
 
     # delete user from authority file
     # through public key to identify user
-    elif args[0] == 'delete-user':
-        if len(args) == 2:
-            if os.access(args[1], os.F_OK):
-                projectLocation = os.getcwd()
-                remoteRepo = RemoteRepo()
-                remoteHash = remoteRepo.getRemoteHash()
-                remoteFileHash = remoteRepo.getRemoteFileHash()
-                pathLocalRemoteRepo = genKey32()
-                ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash, pathLocalRemoteRepo)
-                os.system(ipfsGetRepoCmd)
-                os.chdir(pathLocalRemoteRepo)
-                accessControl = AccessControl(remoteHash)
-                accessControl.setKeyNameFromJson()
-                accessControl.getUserKey("self")
-                # judge authority
-                if accessControl.verifiAuth(accessControl.pubkey):
-                    pubkey = readPublicKey(args[1])
-                    accessControl.deleteAdmin(pubkey)
-
-                    accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
-                    newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
-                    namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
-                    os.system(namePublishCmd)
-                    accessControl.deleteIPNSKey()
-                else:
-                    print "ERROR: You don't have permission to add admin."
-
-                os.chdir(projectLocation)
-                os.system("rm -rf %s" % pathLocalRemoteRepo)
-            else:
-                print "ERROR: The path doesn't exist."
-        else:
-            print "ERROR: Please enter a path to the public key of user."
+    # elif args[0] == 'delete-user':
+    #     if len(args) == 2:
+    #         if os.access(args[1], os.F_OK):
+    #             projectLocation = os.getcwd()
+    #             remoteRepo = RemoteRepo()
+    #             remoteHash = remoteRepo.getRemoteHash()
+    #             remoteFileHash = remoteRepo.getRemoteFileHash()
+    #             pathLocalRemoteRepo = genKey32()
+    #             ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteFileHash, pathLocalRemoteRepo)
+    #             os.system(ipfsGetRepoCmd)
+    #             os.chdir(pathLocalRemoteRepo)
+    #             accessControl = AccessControl(remoteHash)
+    #             accessControl.setKeyNameFromJson()
+    #             accessControl.getUserKey("self")
+    #             # judge authority
+    #             if accessControl.verifiAuth(accessControl.pubkey):
+    #                 pubkey = readPublicKey(args[1])
+    #                 accessControl.deleteAdmin(pubkey)
+    #
+    #                 accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
+    #                 newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+    #                 namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
+    #                 os.system(namePublishCmd)
+    #                 accessControl.deleteIPNSKey()
+    #             else:
+    #                 print "ERROR: You don't have permission to add admin."
+    #
+    #             os.chdir(projectLocation)
+    #             os.system("rm -rf %s" % pathLocalRemoteRepo)
+    #         else:
+    #             print "ERROR: The path doesn't exist."
+    #     else:
+    #         print "ERROR: Please enter a path to the public key of user."
 
     # the process of delete user
     # 判断args[2]是否为公钥路径：
