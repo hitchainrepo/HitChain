@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 *.pyc
 .idea/*.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/hitch.iml
 .DS_Store
 .idea/*.iml
 

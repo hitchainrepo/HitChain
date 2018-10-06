@@ -53,12 +53,17 @@ def main():
             # add new repo to ipfs network
             # use ipfs add -r .
             # print "add repo to ipfs network"
-            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            addResponse = os.popen("ipfs add -r .").read()
+            lastline = addResponse.splitlines()[-1].lower()
+            if lastline != "added completely!":
+                print lastline
+                return
+            newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
             # get ipfs hash of new add repo, and publish it to ipns
             # accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
             # print "publish file to ipns %s" % remoteHash
             # namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
-            dataUpdate = {"username":username,"password":pwd,"reponame":remoteRepo.repoName}
+            dataUpdate = {"username":username,"password":pwd,"reponame":remoteRepo.repoName,"ipfshash":newRepoHash}
             updateRequest = requests.post(remoteRepo.updateIPFSurl, data=dataUpdate)
             # os.system(namePublishCmd)
             # accessControl.deleteIPNSKey()
@@ -80,7 +85,7 @@ def main():
             projectLocation = os.getcwd()
             os.chdir(repoName)
             os.system("git update-server-info")
-            os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
+            # os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
 
             username = args[2]
             password = args[3]
