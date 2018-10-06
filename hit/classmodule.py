@@ -42,20 +42,26 @@ class RemoteRepo():
     def getRemoteFileHash(self):
         return self.remoteFileHash
 
-# class RemoteRepoPlatform():
-#     def __init__(self):
-#         return
+class RemoteRepoPlatform():
+    def __init__(self):
+        import requests
+        self.cf = Config().getHitConfig()
+        self.repoUrl = self.cf.get("remote \"origin\"","repoUrl")
+        self.repoName = self.cf.get("remote \"origin\"","repoName")
+        repoIpfsUrl = self.repoUrl
+        self.remoteIpfs = requests.get(repoIpfsUrl).json()
 
-class config():
+class Config():
     def __init__(self):
         self.path = ".hit/config"
 
-    def initConfig(self,repoUrl):
+    def initConfig(self,repoUrl,repoName):
         import ConfigParser
         cf = ConfigParser.ConfigParser()
         cf.read(self.path)
         cf.add_section("remote \"origin\"")
-        cf.set("remote \"origin\"","url",repoUrl)
+        cf.set("remote \"origin\"","repoUrl",repoUrl)
+        cf.set("remote \"origin\"","repoName",repoName)
         with open(self.path, "w+") as f:
             cf.write(f)
 
@@ -64,11 +70,6 @@ class config():
         cf = ConfigParser.ConfigParser()
         cf.read(self.path)
         return cf
-
-
-
-
-
 
 class AccessControl():
     # authority management

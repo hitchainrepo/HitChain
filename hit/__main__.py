@@ -4,10 +4,14 @@ import os
 # import random
 # import string
 import time
-from .classmodule import RemoteRepo, AccessControl
+from .classmodule import *
 from .funcmodule import *
+<<<<<<< Updated upstream
 import urllib2
 import json
+=======
+import ConfigParser
+>>>>>>> Stashed changes
 
 
 def main():
@@ -224,6 +228,9 @@ def main():
     #       不是->返回，删除权限文件
 
     else:
+        cf = ConfigParser.ConfigParser()
+        cf.read(".git/config")
+        cf.set("remote \"origin\"","url",RemoteRepoPlatform().remoteIpfs)
         cmd = "git"
         for arg in args:
             cmd += " " + arg
