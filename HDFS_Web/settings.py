@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=4hh&%^8tyr_3d+t0lsrefd2@l5x^$t)ukrk84ar67!d+&)p&r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'HDFS_Web',
         'USER': 'root',
-        'PASSWORD': '111111',
+        'PASSWORD': 'pdl123456',
         'HOST': 'localhost',
         'PORT': '3306',
     }
