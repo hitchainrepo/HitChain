@@ -6,10 +6,10 @@ ip = "127.0.0.1"
 port = "8000"
 client = Client("http://%s:%s/webservice/?wsdl"%(ip, port))    #你请求的url
 
-data = "nigel007"
+data = "nigel007/firstRepo"
 
 try:
-    result = client.service.getIpfsHash(data, "123456", "nigel007/firstRepo")
+    result = client.service.getIpfsHash(data)
     print(result)
 except:
     traceback.print_exc()

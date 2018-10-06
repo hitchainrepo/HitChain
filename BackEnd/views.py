@@ -211,7 +211,7 @@ def searchUsername(request):
 # add by Nigel start: webservice
 class HDFS(ServiceBase):
     @rpc(Unicode, Unicode, Unicode, _returns=Iterable(Unicode))
-    def getIpfsHash(ctx, username, password, repo):
+    def changeIpfsHash(ctx, username, password, repo):
 
         responseList = {
             "user": "username or password error",
@@ -221,7 +221,7 @@ class HDFS(ServiceBase):
         }
 
         user = auth.authenticate(username=username, password=password)
-        dic = {"response":"username or password error"}
+        dic = {"response":"user"}
         if user:
             if repo is None:
                 dic = {"response":responseList["repo"]}
@@ -243,6 +243,30 @@ class HDFS(ServiceBase):
                             dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
                         else:
                             dic = {"response":responseList["auth"]}
+        return HttpResponse(json.dumps(dic))
+
+    @rpc(Unicode, _returns=Iterable(Unicode))
+    def getIpfsHash(ctx, repo):
+        responseList = {
+            "repo": "wrong repository",
+            "success": "success"
+        }
+        dic = {"response":responseList["repo"]}
+        if repo is None:
+            dic = {"response":responseList["repo"]}
+        else:
+            index_left = repo.find("/")
+            if index_left < 0:
+                dic = {"response":responseList["repo"]}
+            else:
+                ownername = repo[:index_left]
+                reponame = repo[index_left + 1:]
+                ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
+                if len(ownerItem) <= 0:
+                    dic = {"response":responseList["repo"]}
+                else:
+                    ownerItem = ownerItem[0]
+                    dic = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
         return HttpResponse(json.dumps(dic))
 
 application = Application([HDFS],
