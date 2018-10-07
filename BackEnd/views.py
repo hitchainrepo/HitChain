@@ -121,32 +121,35 @@ def newRepo(request):
         return redirect("/")
 
     if request.method == 'GET':
-        username = request.GET.get("username")
-        password = request.GET.get("password")
-        reponame = request.GET.get("reponame")
-        ipfsHash = request.GET.get("ipfsHash")
-
-        # judge whether the username and password right
-        user = auth.authenticate(username=username, password=password)
-        if user:
-            # judge whether the reponame of this user exists
-            repos = Repo.objects.filter(username=username, reponame=reponame)
-            if len(repos) == 0:
-                newRepo = Repo()
-                newRepo.username = username
-                newRepo.reponame = reponame
-                newRepo.ipfs_hash = ipfsHash
-                newRepo.create_time = getCurrentTime()
-                newRepo.save()
-
-                response = JsonResponse({'response': "success"})
-                return response
-            else:
-                response = JsonResponse({'response': "this repository already exists"})
-                return response
+        if request.user.is_authenticated():
+            return render(request, 'new.html')
         else:
-            response = JsonResponse({'response': 'wrong username or password'})
-            return response
+            username = request.GET.get("username")
+            password = request.GET.get("password")
+            reponame = request.GET.get("reponame")
+            ipfsHash = request.GET.get("ipfsHash")
+
+            # judge whether the username and password right
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                # judge whether the reponame of this user exists
+                repos = Repo.objects.filter(username=username, reponame=reponame)
+                if len(repos) == 0:
+                    newRepo = Repo()
+                    newRepo.username = username
+                    newRepo.reponame = reponame
+                    newRepo.ipfs_hash = ipfsHash
+                    newRepo.create_time = getCurrentTime()
+                    newRepo.save()
+
+                    response = JsonResponse({'response': "success"})
+                    return response
+                else:
+                    response = JsonResponse({'response': "this repository already exists"})
+                    return response
+            else:
+                response = JsonResponse({'response': 'wrong username or password'})
+                return response
 
     return render(request, 'new.html')
 
@@ -229,26 +232,54 @@ def webservice(request):
             data = JSONParser().parse(request)
             if "method" not in data:
                 content = {"response": responseList["request"]}
-                return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(data=content, status=status.HTTP_200_OK)
             else:
                 method = data["method"]
                 if method == "getIpfsHash":
                     if "ownername" not in data or "reponame" not in data:
                         content = {"response": responseList["request"]}
-                        return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
+                        return JsonResponse(data=content, status=status.HTTP_200_OK)
                     else:
                         ownername = data["ownername"]
                         reponame = data["reponame"]
                         ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
                         if len(ownerItem) <= 0:
                             content = {"response":responseList["repo"]}
-                            return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
+                            return JsonResponse(data=content, status=status.HTTP_200_OK)
                         else:
                             ownerItem = ownerItem[0]
                             content = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
                             return JsonResponse(data=content, status=status.HTTP_200_OK)
                 elif method == "changeIpfsHash":
                     print("in change")
+                    if "username" not in data or "password" not in data or "ownername" not in data or "reponame" not in data:
+                        content = {"response": responseList["request"]}
+                        return JsonResponse(data=content, status=status.HTTP_200_OK)
+                    else:
+                        username = data["username"]
+                        password = data["password"]
+                        ownername = data["ownername"]
+                        reponame = data["reponame"]
+
+                        user = auth.authenticate(username=username, password=password)
+                        if not user:
+                            content = {"response":responseList["user"]}
+                            return JsonResponse(data=content, status=status.HTTP_200_OK)
+
+                        ownerItem = Repo.objects.filter(username=ownername, reponame=reponame)
+                        if len(ownerItem) <= 0:
+                            content = {"response":responseList["repo"]}
+                            return JsonResponse(data=content, status=status.HTTP_200_OK)
+                        else:
+                            ownerItem = ownerItem[0]
+                            repoId = ownerItem.id
+                            authorityItem = Authority.objects.filter(repo_id=repoId, username=username)
+                            if authorityItem:
+                                content = {"response":responseList["success"], "ipfs_hash":ownerItem.ipfs_hash}
+                                return JsonResponse(data=content, status=status.HTTP_200_OK)
+                            else:
+                                content = {"response":responseList["auth"]}
+                                return JsonResponse(data=content, status=status.HTTP_200_OK)
                 else:
                     content = {"response":responseList["request"]}
                     return JsonResponse(data=content, status=status.HTTP_400_BAD_REQUEST)
