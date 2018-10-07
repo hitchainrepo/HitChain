@@ -112,8 +112,6 @@ def main():
             # remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
 
             # connect to the restful webservice
-            import requests
-            import json
             data = {"method": "hitTransfer", "username": username, "password": password, "reponame": newRepoName, "ipfsHash":newRepoHash}
             data = json.dumps(data)
             response = requests.post("http://localhost:8000/webservice/", data=data)
