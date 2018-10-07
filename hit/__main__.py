@@ -4,6 +4,9 @@ import os
 # import random
 # import string
 import time
+
+import requests as requests
+
 from .classmodule import *
 from .funcmodule import *
 import urllib2
@@ -79,8 +82,23 @@ def main():
             print "ERROR: Access denied to push your code to the repo"
 
     elif args[0] == "create":
-        #TODO:
-        return
+        #TODO: chdir root project
+        username = args[1]
+        password = args[2]
+        repoName = args[3]
+        config = Config
+        config.changeConfig(repoName,username)
+        addResponse = os.popen("ipfs add -r .").read()
+        lastline = addResponse.splitlines()[-1].lower()
+        if lastline != "added completely!":
+            print lastline
+            return
+        newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
+        # TODO: change web ipfs hash api
+        dataUpdate = json.dumps({"method": "changeIpfsHash", "username": username, "password": password,
+                                 "reponame": repoName, "ownername": username,
+                                 "ipfshash": newRepoHash})
+        updateRequest = requests.post("http://47.105.76.115:8000/webservice/", data=dataUpdate)
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
@@ -95,7 +113,6 @@ def main():
             username = args[2]
             password = args[3]
             newRepoName = args[4]
-            repoUrl = ""
 
             config = Config()
             config.initConfig(newRepoName,username)
@@ -248,7 +265,7 @@ def main():
     else:
         cf = ConfigParser.ConfigParser()
         cf.read(".git/config")
-        cf.set("remote \"origin\"","url",RemoteRepoPlatform().remoteIpfs)
+        cf.set("remote \"origin\"","url",RemoteRepoPlatform().remoteIpfsUrl)
         cmd = "git"
         for arg in args:
             cmd += " " + arg

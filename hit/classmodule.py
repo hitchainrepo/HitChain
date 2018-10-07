@@ -83,6 +83,17 @@ class Config():
         with open(self.path, "w+") as f:
             cf.write(f)
 
+    def changeConfig(self,repoName,userName):
+        import ConfigParser
+        from funcmodule import mkdir
+        mkdir(".hit")
+        cf = ConfigParser.ConfigParser()
+        cf.read(self.path)
+        cf.set("remote \"origin\"", "repoName", repoName)
+        cf.set("remote \"origin\"", "userName", userName)
+        with open(self.path, "w+") as f:
+            cf.write(f)
+
     def getHitConfig(self):
         import ConfigParser
         cf = ConfigParser.ConfigParser()
