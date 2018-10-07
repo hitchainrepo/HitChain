@@ -33,7 +33,8 @@
                             <a class="text-danger" href="newRepo"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
                         </div>
                         {% for repo in repos %}
-                            <a href="/showAuth?repoId={{ repo.id }}" class="list-group-item">{{ repo.reponame }}</a>
+                            <span class="list-group-item"><a href="/showAuth?repoId={{ repo.id }}">{{ repo.reponame }}</a>
+                            {{ repo.ipfs_hash }}</span>
                         {% endfor %}
                     </div>
                 </div>
