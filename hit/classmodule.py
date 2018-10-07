@@ -45,14 +45,23 @@ class RemoteRepo():
 class RemoteRepoPlatform():
     def __init__(self):
         import requests
+        import json
+        # from suds.client import Client
+        # remoteip = "47.105.76.115"
+        # remoteport = "8000"
+        # client = Client("http://%s:%s/webservice/?wsdl"%(remoteip,remoteport))
         self.cf = Config().getHitConfig()
         self.repoUrl = self.cf.get("remote \"origin\"","repoUrl")
         self.repoName = self.cf.get("remote \"origin\"","repoName")
+        self.userName = self.cf.get("remote \"origin\"","userName")
         # 待补充真正的url获取IPFS地址
-        repoIpfsUrl = self.repoUrl
-        self.remoteIpfs = requests.get(repoIpfsUrl).json()
-        # TODO: UPDATE
-        self.updateIPFSurl = self.repoUrl
+        self.repoIpfsUrl = "http://47.105.76.115:8000/webservice/"
+        # self.remoteIpfs = client.service.getIpfsHash(self.repoName)
+        ipfsHashData = json.dumps({"method":"getIpfsHash","ownername":self.userName,"reponame":"test"})
+        response = requests.post(self.repoIpfsUrl,data=ipfsHashData).json()
+        if response["response"] == "success":
+            self.remoteIpfsHash = response["ipfs_hash"]
+            self.remoteIpfsUrl = "http://localhost:8080/ipfs/" + self.remoteIpfsHash
 
     def verifiAuth(self,userName,pwd):
         # TODO:
@@ -62,13 +71,15 @@ class Config():
     def __init__(self):
         self.path = ".hit/config"
 
-    def initConfig(self,repoUrl,repoName):
+    def initConfig(self,repoName,userName):
         import ConfigParser
+        from funcmodule import mkdir
+        mkdir(".hit")
         cf = ConfigParser.ConfigParser()
         cf.read(self.path)
         cf.add_section("remote \"origin\"")
-        cf.set("remote \"origin\"","repoUrl",repoUrl)
         cf.set("remote \"origin\"","repoName",repoName)
+        cf.set("remote \"origin\"","userName",userName)
         with open(self.path, "w+") as f:
             cf.write(f)
 

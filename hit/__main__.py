@@ -21,7 +21,7 @@ def main():
 
         remoteRepo = RemoteRepoPlatform()
         # get remote ipns hash
-        remoteHash = remoteRepo.remoteIpfs
+        remoteUrl = remoteRepo.remoteIpfsUrl
 
         username = input("user name: ")
         pwd = getpass.getpass('password: ')
@@ -30,7 +30,7 @@ def main():
             pathLocalRemoteRepo = genKey32()
             # download remote repo to local
             print "hit get ipfs repo to local"
-            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteHash,pathLocalRemoteRepo) # 要重命名
+            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteUrl,pathLocalRemoteRepo) # 要重命名
             print ipfsGetRepoCmd
             os.system(ipfsGetRepoCmd)
             # push repo to downloaded remote repo
@@ -63,8 +63,10 @@ def main():
             # accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
             # print "publish file to ipns %s" % remoteHash
             # namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
-            dataUpdate = {"username":username,"password":pwd,"reponame":remoteRepo.repoName,"ipfshash":newRepoHash}
-            updateRequest = requests.post(remoteRepo.updateIPFSurl, data=dataUpdate)
+            dataUpdate = json.dumps({"method":"changeIpfsHash","username":username,"password":pwd,
+                                     "reponame":remoteRepo.repoName,"ownername":remoteRepo.userName,
+                                     "ipfshash":newRepoHash})
+            updateRequest = requests.post(remoteRepo.repoIpfsUrl, data=dataUpdate)
             # os.system(namePublishCmd)
             # accessControl.deleteIPNSKey()
             # else:
@@ -75,7 +77,10 @@ def main():
             os.system("rm -rf %s" % pathLocalRemoteRepo)
         else:
             print "ERROR: Access denied to push your code to the repo"
-        os.system("rm %s" % remoteHash)
+
+    elif args[0] == "create":
+        #TODO:
+        return
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
@@ -90,6 +95,10 @@ def main():
             username = args[2]
             password = args[3]
             newRepoName = args[4]
+            repoUrl = ""
+
+            config = Config()
+            config.initConfig(newRepoName,username)
 
             response = os.popen("ipfs add -r .").read()
             lastline = response.splitlines()[-1].lower()
@@ -98,9 +107,9 @@ def main():
                 return
             # newRepoHash = response.splitlines()[-1].split(" ")[1]
             newRepoHash = response.splitlines()[-2].split(" ")[1]
-            os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
-            namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
-            remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
+            # os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
+            # namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
+            # remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
 
             # connect to the webservice
             url = "http://localhost:8000/newRepo?username=" + username + "&password=" + password + "&reponame=" + newRepoName + "&ipfsHash=" + newRepoHash
