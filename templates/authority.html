@@ -37,7 +37,7 @@
                         {% for auth in auths %}
                             <div class="list-group-item">
                                 <span class="text-left text-muted">{{ auth.username }}</span>
-                                {% if request.user.username == ownerDev %}
+                                {% if request.user.username == ownerDev and auth.user_type != "owner" %}
                                     <a class="text-muted" href="/removeAuth?repoId={{ repoId }}&username={{ auth.username }}"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></a>
                                 {% endif %}
                             </div>
