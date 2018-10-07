@@ -75,7 +75,7 @@ def main():
             # else:
             #     print "Err: The remote repo has been updated by other user, please push the repo again."
             # rm temp local repo
-            print updateRequest
+            print updateRequest["response"]
             os.chdir(projectLocation)
             os.system("rm -rf %s" % pathLocalRemoteRepo)
         else:
@@ -99,6 +99,7 @@ def main():
                                  "reponame": repoName, "ownername": username,
                                  "ipfshash": newRepoHash})
         updateRequest = requests.post("http://47.105.76.115:8000/webservice/", data=dataUpdate)
+        print updateRequest["response"]
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
