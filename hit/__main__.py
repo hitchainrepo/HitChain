@@ -97,14 +97,24 @@ def main():
             namePublishCmd = "ipfs name publish --key=%s %s" % (repoName, newRepoHash)
             remoteHash = os.popen(namePublishCmd).read().split(" ")[2][0:-1]
 
-            # connect to the webservice
-            url = "http://localhost:8000/newRepo?username=" + username + "&password=" + password + "&reponame=" + newRepoName + "&ipfsHash=" + newRepoHash
-            req = urllib2.Request(url)
-            res_data = urllib2.urlopen(req)
-            res = res_data.read().decode('utf-8')
-            res = json.loads(res)
-            if res["response"] != "success":
+            # connect to the restful webservice
+            import requests
+            import json
+            data = {"method": "hitTransfer", "username": username, "password": password, "reponame": newRepoName, "ipfsHash":newRepoHash}
+            data = json.dumps(data)
+            response = requests.post("http://localhost:8000/webservice/", data=data)
+            response = response.json()
+            if response["response"] != "success":
                 return
+
+            # result = response.json()
+            # url = "http://localhost:8000/newRepo?username=" + username + "&password=" + password + "&reponame=" + newRepoName + "&ipfsHash=" + newRepoHash
+            # req = urllib2.Request(url)
+            # res_data = urllib2.urlopen(req)
+            # res = res_data.read().decode('utf-8')
+            # res = json.loads(res)
+            # if res["response"] != "success":
+            #     return
 
             # accessControl = AccessControl(remoteHash)
             # accessControl.setKeyName(repoName)
