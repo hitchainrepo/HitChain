@@ -16,6 +16,8 @@ import getpass
 import requests
 
 
+remoteAddress = "47.105.76.115:8000"
+
 def main():
     args = sys.argv[1:]
     # print args
@@ -99,7 +101,7 @@ def main():
         dataUpdate = json.dumps({"method": "changeIpfsHash", "username": username, "password": password,
                                  "reponame": repoName, "ownername": username,
                                  "ipfshash": newRepoHash})
-        updateRequest = requests.post("http://47.105.76.115:8000/webservice/", data=dataUpdate)
+        updateRequest = requests.post("http://" + remoteAddress + "/webservice/", data=dataUpdate)
         print updateRequest["response"]
 
     elif args[0] == "transfer":
@@ -142,7 +144,7 @@ def main():
             # connect to the restful webservice
             data = {"method": "hitTransfer", "username": username, "password": password, "reponame": newRepoName, "ipfsHash":newRepoHash}
             data = json.dumps(data)
-            response = requests.post("http://localhost:8000/webservice/", data=data)
+            response = requests.post("http://" + remoteAddress + "/webservice/", data=data)
             response = response.json()
             if response["response"] != "success":
                 return
