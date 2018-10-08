@@ -277,16 +277,14 @@ def main():
     #       是->AccessControl.deleAdmin()
     #           提交权限文件
     #       不是->返回，删除权限文件
-    elif args[0] == "clone":
+    elif args[0] == "pull":
+        os.system("git remote set-url origin %s" % RemoteRepoPlatform().remoteIpfsUrl)
         cmd = "git"
         for arg in args:
             cmd += " " + arg
         os.system(cmd)
 
     else:
-        cf = ConfigParser.ConfigParser()
-        cf.read(".git/config")
-        cf.set("remote \"origin\"","url",RemoteRepoPlatform().remoteIpfsUrl)
         cmd = "git"
         for arg in args:
             cmd += " " + arg
