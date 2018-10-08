@@ -119,10 +119,11 @@ def main():
 
             config = Config()
             config.initConfig(newRepoName, username)
-
+            os.system("git add .")
+            os.system("git commit -m 'hit init'")
             os.system("git push %s" % rootLocation+"/"+repoNameBare)
             os.chdir(rootLocation)
-            # os.system("rm -rf %s/%s" % (rootLocation, repoNameBack))
+            os.system("rm -rf %s/%s" % (rootLocation, repoNameBack))
 
             os.chdir(repoNameBare)
             os.system("git update-server-info")
@@ -169,7 +170,7 @@ def main():
             # namePublishCmd2 = "ipfs name publish --key=%s %s" % (repoName, newRepoHash2)
             # os.system(namePublishCmd2)
             #
-            # os.system("rm -rf %s/%s" % (rootLocation, repoNameBare))
+            os.system("rm -rf %s/%s" % (rootLocation, repoNameBare))
         elif len(args) == 1:
             # TODO:
             # this method is not finish
