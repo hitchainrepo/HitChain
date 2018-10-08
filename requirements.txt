@@ -39,3 +39,4 @@ suds-jurko==0.6
 testpath==0.3
 typing==3.6.2
 urllib3==1.21.1
+configparser==3.5.0

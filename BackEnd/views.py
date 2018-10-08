@@ -103,10 +103,18 @@ def newRepo(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         reponame = request.POST.get('reponame')
+
+        repoInfo = {"reponame":reponame}
+        userInfo = {"username":username}
+        newIpfsHash = createIpfsRepository(repoInfo, userInfo)
+        if newIpfsHash == None:
+            return JsonResponse(data={"result": "new repository error"}, status=status.HTTP_400_BAD_REQUEST)
+
         repoItem = Repo()
         repoItem.username = username
         repoItem.reponame = reponame
-        repoItem.ipfs_hash = "QmdfYLM2jQRF6EMWNQwbMeTmqrxw1YAFA4ithj6KctVRZ8" # the hash value of README file
+        # repoItem.ipfs_hash = "QmdfYLM2jQRF6EMWNQwbMeTmqrxw1YAFA4ithj6KctVRZ8" # the hash value of README file
+        repoItem.ipfs_hash = newIpfsHash
         currentTime = getCurrentTime()
         repoItem.create_time = currentTime
         repoItem.save()
