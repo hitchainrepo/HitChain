@@ -137,6 +137,7 @@ def main():
             response = requests.post("http://" + remoteAddress + "/webservice/", data=data)
             response = response.json()
             if response["response"] != "success":
+                print response["response"]
                 return
 
             # result = response.json()
