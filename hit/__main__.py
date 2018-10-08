@@ -85,6 +85,7 @@ def main():
 
     elif args[0] == "create":
         #TODO: chdir root project
+
         username = args[1]
         password = args[2]
         repoName = args[3]
@@ -105,20 +106,29 @@ def main():
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
-            repoName = args[1].split("/")[-1]
+            repoNameBare = args[1].split("/")[-1]
             # accessControl = AccessControl()
+            rootLocation = os.getcwd()
             os.system("git clone --bare %s" % (args[1]))
-            projectLocation = os.getcwd()
-            os.chdir(repoName)
-            os.system("git update-server-info")
-            # os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
-
+            repoNameBack = genKey32()
+            os.system("git clone %s %s"%(args[1],repoNameBack))
+            os.chdir(repoNameBack)
             username = args[2]
             password = args[3]
             newRepoName = args[4]
 
             config = Config()
-            config.initConfig(newRepoName,username)
+            config.initConfig(newRepoName, username)
+
+            os.system("git push %s" % rootLocation+"/"+repoNameBare)
+            os.chdir(rootLocation)
+            os.system("rm -rf %s/%s" % (rootLocation, repoNameBack))
+
+            os.chdir(repoNameBare)
+            os.system("git update-server-info")
+            # os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
+
+
 
             response = os.popen("ipfs add -r .").read()
             lastline = response.splitlines()[-1].lower()
@@ -158,7 +168,7 @@ def main():
             # namePublishCmd2 = "ipfs name publish --key=%s %s" % (repoName, newRepoHash2)
             # os.system(namePublishCmd2)
             #
-            # os.system("rm -rf %s/%s" % (projectLocation, repoName))
+            os.system("rm -rf %s/%s" % (rootLocation, repoNameBare))
         elif len(args) == 1:
             # TODO:
             # this method is not finish
