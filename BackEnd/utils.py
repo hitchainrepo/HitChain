@@ -63,7 +63,9 @@ def createLocalRepository(repoInfo, userInfo):
 # else return None
 def createIpfsRepository(repoInfo, userInfo):
     repoPath = createLocalRepository(repoInfo, userInfo)
+    print(repoPath)
     addResponse = os.popen("ipfs add -r " + repoPath).read()
+    print(addResponse)
     lastline = addResponse.splitlines()[-1].lower()
     if lastline != "added completely!":
         return None
