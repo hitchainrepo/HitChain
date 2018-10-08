@@ -28,7 +28,7 @@ def main():
         # get remote ipns hash
         remoteUrl = remoteRepo.remoteIpfsUrl
 
-        username = input("user name: ")
+        username = raw_input("user name: ")
         pwd = getpass.getpass('password: ')
         if remoteRepo.verifiAuth(username,pwd):
             # gen a key to store remote repo
