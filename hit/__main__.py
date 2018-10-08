@@ -122,13 +122,11 @@ def main():
 
             os.system("git push %s" % rootLocation+"/"+repoNameBare)
             os.chdir(rootLocation)
-            os.system("rm -rf %s/%s" % (rootLocation, repoNameBack))
+            # os.system("rm -rf %s/%s" % (rootLocation, repoNameBack))
 
             os.chdir(repoNameBare)
             os.system("git update-server-info")
             # os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
-
-
 
             response = os.popen("ipfs add -r .").read()
             lastline = response.splitlines()[-1].lower()
@@ -146,8 +144,11 @@ def main():
             data = json.dumps(data)
             response = requests.post("http://" + remoteAddress + "/webservice/", data=data)
             response = response.json()
-            if response["response"] != "success":
-                return
+            # if response["response"] != "success":
+            #     print response["response"]
+            #     return
+
+            print response["response"]
 
             # result = response.json()
             # url = "http://localhost:8000/newRepo?username=" + username + "&password=" + password + "&reponame=" + newRepoName + "&ipfsHash=" + newRepoHash
@@ -167,7 +168,7 @@ def main():
             # namePublishCmd2 = "ipfs name publish --key=%s %s" % (repoName, newRepoHash2)
             # os.system(namePublishCmd2)
             #
-            os.system("rm -rf %s/%s" % (rootLocation, repoNameBare))
+            # os.system("rm -rf %s/%s" % (rootLocation, repoNameBare))
         elif len(args) == 1:
             # TODO:
             # this method is not finish
@@ -274,6 +275,11 @@ def main():
     #       是->AccessControl.deleAdmin()
     #           提交权限文件
     #       不是->返回，删除权限文件
+    elif args[0] == "clone":
+        cmd = "git"
+        for arg in args:
+            cmd += " " + arg
+        os.system(cmd)
 
     else:
         cf = ConfigParser.ConfigParser()
