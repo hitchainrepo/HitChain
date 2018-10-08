@@ -51,7 +51,7 @@ class RemoteRepoPlatform():
         # remoteport = "8000"
         # client = Client("http://%s:%s/webservice/?wsdl"%(remoteip,remoteport))
         self.cf = Config().getHitConfig()
-        self.repoUrl = self.cf.get("remote \"origin\"","repoUrl")
+        # self.repoUrl = self.cf.get("remote \"origin\"","repoUrl")
         self.repoName = self.cf.get("remote \"origin\"","repoName")
         self.userName = self.cf.get("remote \"origin\"","userName")
         # 待补充真正的url获取IPFS地址
