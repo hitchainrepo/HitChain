@@ -25,8 +25,8 @@ def main():
         projectLocation = os.getcwd()
 
         remoteRepo = RemoteRepoPlatform()
-        # get remote ipns hash
-        remoteUrl = remoteRepo.remoteIpfsUrl
+        # get remote ipfs hash
+        remoteHash = remoteRepo.remoteIpfsHash
 
         username = raw_input("user name: ")
         pwd = getpass.getpass('password: ')
@@ -35,7 +35,7 @@ def main():
             pathLocalRemoteRepo = genKey32()
             # download remote repo to local
             print "hit get ipfs repo to local"
-            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteUrl,pathLocalRemoteRepo) # 要重命名
+            ipfsGetRepoCmd = "ipfs get %s -o %s" % (remoteHash,pathLocalRemoteRepo) # 要重命名
             print ipfsGetRepoCmd
             os.system(ipfsGetRepoCmd)
             # push repo to downloaded remote repo

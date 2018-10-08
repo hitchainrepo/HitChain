@@ -57,7 +57,7 @@ class RemoteRepoPlatform():
         # 待补充真正的url获取IPFS地址
         self.repoIpfsUrl = "http://47.105.76.115:8000/webservice/"
         # self.remoteIpfs = client.service.getIpfsHash(self.repoName)
-        ipfsHashData = json.dumps({"method":"getIpfsHash","ownername":self.userName,"reponame":"test"})
+        ipfsHashData = json.dumps({"method":"getIpfsHash","ownername":self.userName,"reponame":self.repoName})
         response = requests.post(self.repoIpfsUrl,data=ipfsHashData).json()
         if response["response"] == "success":
             self.remoteIpfsHash = response["ipfs_hash"]
