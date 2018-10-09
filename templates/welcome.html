@@ -33,13 +33,13 @@
                             <a class="text-danger" href="newRepo"><span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
                         </div>
                         {% for repo in repos %}
-                            <span class="list-group-item"><a href="/showAuth?repoId={{ repo.id }}">{{ repo.reponame }}</a>
-                            {{ repo.ipfs_hash }}</span>
+{#                            <span class="list-group-item"><a href="/showAuth?repoId={{ repo.id }}">{{ repo.reponame }}</a>#}
+{#                            {{ repo.ipfs_hash }}</span>#}
+                            <a class="list-group-item" href="/showAuth?repoId={{ repo.id }}"> http://47.105.76.115:8000/{{repo.username }}/{{ repo.reponame }}.hit</a>
                         {% endfor %}
                     </div>
                 </div>
-            </div>
-        </div>
+           </div>
 
     {% else %}
 
