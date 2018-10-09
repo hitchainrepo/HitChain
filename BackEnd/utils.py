@@ -67,12 +67,10 @@ def createLocalRepository(repoInfo, userInfo):
 # else return None
 def createIpfsRepository(repoInfo, userInfo):
     repoPath = createLocalRepository(repoInfo, userInfo)
-    print(repoPath)
     addResponse = os.popen("ipfs add -r " + repoPath).read()
-    print(addResponse)
     lastline = addResponse.splitlines()[-1].lower()
     if lastline != "added completely!":
         return None
     newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
-    shutil.rmtree(repoPath) # after added to ipfs net, remove the local repo
+    # shutil.rmtree(repoPath) # after added to ipfs net, remove the local repo
     return newRepoHash
