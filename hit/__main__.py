@@ -62,16 +62,20 @@ def main():
             lastline = addResponse.splitlines()[-1].lower()
             if lastline != "added completely!":
                 print lastline
+                os.chdir(projectLocation)
+                os.system("rm -rf %s" % pathLocalRemoteRepo)
                 return
             newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
             # get ipfs hash of new add repo, and publish it to ipns
             # accessControl.savePublicKeyOfIpns(accessControl.getPublicKeyFromJson())
             # print "publish file to ipns %s" % remoteHash
             # namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash,newRepoHash)
-            dataUpdate = json.dumps({"method":"changeIpfsHash","username":username,"password":pwd,
+            dataUpdate = {"method":"changeIpfsHash","username":username,"password":pwd,
                                      "reponame":remoteRepo.repoName,"ownername":remoteRepo.userName,
-                                     "ipfshash":newRepoHash})
-            updateRequest = requests.post(remoteRepo.repoIpfsUrl, data=dataUpdate)
+                                     "ipfsHash":newRepoHash}
+            dataUpdate = json.dumps(dataUpdate)
+            # print dataUpdate
+            updateRequest = requests.post(remoteRepo.repoIpfsUrl, data=dataUpdate).json()
             # os.system(namePublishCmd)
             # accessControl.deleteIPNSKey()
             # else:
@@ -100,7 +104,7 @@ def main():
         # TODO: change web ipfs hash api
         dataUpdate = json.dumps({"method": "changeIpfsHash", "username": username, "password": password,
                                  "reponame": repoName, "ownername": username,
-                                 "ipfshash": newRepoHash})
+                                 "ipfsHash": newRepoHash})
         updateRequest = requests.post("http://" + remoteAddress + "/webservice/", data=dataUpdate)
         print updateRequest["response"]
 
@@ -143,6 +147,7 @@ def main():
             # connect to the restful webservice
             data = {"method": "hitTransfer", "username": username, "password": password, "reponame": newRepoName, "ipfsHash":newRepoHash}
             data = json.dumps(data)
+            # print "update ipfs hash to %s" % remoteAddress
             response = requests.post("http://" + remoteAddress + "/webservice/", data=data)
             response = response.json()
             # if response["response"] != "success":
