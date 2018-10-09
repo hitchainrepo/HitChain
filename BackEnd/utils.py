@@ -73,5 +73,5 @@ def createIpfsRepository(repoInfo, userInfo):
     if lastline != "added completely!":
         return None
     newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
-    # shutil.rmtree(repoPath) # after added to ipfs net, remove the local repo
+    shutil.rmtree(repoPath) # after added to ipfs net, remove the local repo
     return newRepoHash
