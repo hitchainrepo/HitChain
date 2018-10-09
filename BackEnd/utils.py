@@ -46,6 +46,10 @@ def createLocalRepository(repoInfo, userInfo):
 
     os.makedirs(dirPath)
 
+    os.system("git init %s" % (dirPath)) # git init the path
+    file = open(os.path.join(dirPath + "README.md"),'w')
+    file.close()
+
     hitPath = os.path.join(dirPath, ".hit")
 
     mkdir(hitPath)
