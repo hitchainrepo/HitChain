@@ -47,9 +47,9 @@ def createLocalRepository(repoInfo, userInfo):
     os.makedirs(dirPath)
 
     os.system("git init %s" % (dirPath)) # git init the path
-    file = open(os.path.join(dirPath + "README.md"),'w')
-    file.write("This is the readme file")
-    file.close()
+    # file = open(os.path.join(dirPath + "README.md"),'w')
+    # file.write("This is the readme file")
+    # file.close()
 
     hitPath = os.path.join(dirPath, ".hit")
 
@@ -68,7 +68,7 @@ def createLocalRepository(repoInfo, userInfo):
 # else return None
 def createIpfsRepository(repoInfo, userInfo):
     repoPath = createLocalRepository(repoInfo, userInfo)
-    addResponse = os.popen("ipfs add -r " + repoPath).read()
+    addResponse = os.popen("ipfs add -rH " + repoPath).read()
     lastline = addResponse.splitlines()[-1].lower()
     if lastline != "added completely!":
         return None
