@@ -87,26 +87,29 @@ def main():
         else:
             print "ERROR: Access denied to push your code to the repo"
 
-    elif args[0] == "create":
-        #TODO: chdir root project
 
-        username = args[1]
-        password = args[2]
-        repoName = args[3]
-        config = Config
-        config.changeConfig(repoName,username)
-        addResponse = os.popen("ipfs add -r .").read()
-        lastline = addResponse.splitlines()[-1].lower()
-        if lastline != "added completely!":
-            print lastline
-            return
-        newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
-        # TODO: change web ipfs hash api
-        dataUpdate = json.dumps({"method": "changeIpfsHash", "username": username, "password": password,
-                                 "reponame": repoName, "ownername": username,
-                                 "ipfsHash": newRepoHash})
-        updateRequest = requests.post("http://" + remoteAddress + "/webservice/", data=dataUpdate)
-        print updateRequest["response"]
+
+    # elif args[0] == "create":
+    #     #TODO: chdir root project
+    #
+    #     username = args[1]
+    #     password = args[2]
+    #     repoName = args[3]
+    #     config = Config
+    #     config.changeConfig(repoName,username)
+    #     addResponse = os.popen("ipfs add -rH .").read()
+    #     lastline = addResponse.splitlines()[-1].lower()
+    #     if lastline != "added completely!":
+    #         print lastline
+    #         return
+    #     newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
+    #     # TODO: change web ipfs hash api
+    #     dataUpdate = json.dumps({"method": "changeIpfsHash", "username": username, "password": password,
+    #                              "reponame": repoName, "ownername": username,
+    #                              "ipfshash": newRepoHash})
+    #     updateRequest = requests.post("http://" + remoteAddress + "/webservice/", data=dataUpdate)
+    #     print updateRequest["response"]
+
 
     elif args[0] == "transfer":
         if args[1][0:4] == "http":
@@ -117,9 +120,10 @@ def main():
             repoNameBack = genKey32()
             os.system("git clone %s %s"%(args[1],repoNameBack))
             os.chdir(repoNameBack)
-            username = args[2]
-            password = args[3]
-            newRepoName = args[4]
+
+            username = input("user name: ")
+            password = getpass.getpass('password: ')
+            newRepoName = input("repository name: ")
 
             config = Config()
             config.initConfig(newRepoName, username)
