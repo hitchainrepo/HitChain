@@ -41,8 +41,6 @@ def createLocalRepository(repoInfo, userInfo):
 
     dirPath = os.path.join(baseDir, username, reponame)
 
-    print(dirPath)
-
     if os.path.exists(dirPath):
         shutil.rmtree(dirPath)
 
@@ -67,12 +65,12 @@ def createLocalRepository(repoInfo, userInfo):
     os.chdir(dirPath)
     os.system("git add .")
     os.system("git commit -m 'hit init'")
+    os.chdir(cwd)
 
     cloneRepoPath = dirPath + "_clone"
     os.system("git clone %s %s" % (dirPath, cloneRepoPath))
     os.chdir(cloneRepoPath)
     os.system("git update-server-info")
-
     os.chdir(cwd)
 
     return dirPath, cloneRepoPath
