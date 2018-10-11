@@ -58,7 +58,7 @@ def main():
             # add new repo to ipfs network
             # use ipfs add -r .
             # print "add repo to ipfs network"
-            addResponse = os.popen("ipfs add -r .").read()
+            addResponse = os.popen("ipfs add -rH .").read()
             lastline = addResponse.splitlines()[-1].lower()
             if lastline != "added completely!":
                 print lastline
@@ -114,9 +114,9 @@ def main():
             os.system("git clone %s %s"%(args[1],repoNameBack))
             os.chdir(repoNameBack)
 
-            username = input("user name: ")
+            username = raw_input("user name: ")
             password = getpass.getpass('password: ')
-            newRepoName = input("repository name: ")
+            newRepoName = raw_input("repository name: ")
 
             config = Config()
             config.initConfig(newRepoName, username)
@@ -130,7 +130,7 @@ def main():
             os.system("git update-server-info")
             # os.system("echo " + repr(time.time()) + " > timestamp")  # 生成一个时间戳文件
 
-            response = os.popen("ipfs add -r .").read()
+            response = os.popen("ipfs add -rH .").read()
             lastline = response.splitlines()[-1].lower()
             if lastline != "added completely!":
                 print lastline
@@ -182,7 +182,7 @@ def main():
             projectLocation = os.getcwd()
             os.chdir(repoName)
             os.system("git update-server-info")
-            newRepoHash = os.popen("ipfs add -r .").read().splitlines()[-1].split(" ")[1]
+            newRepoHash = os.popen("ipfs add -rH .").read().splitlines()[-1].split(" ")[1]
             remoteHash = os.popen("ipfs key gen --type=rsa --size=2048 %s" % repoName).read()
             namePublishCmd = "ipfs name publish --key=%s %s" % (remoteHash, newRepoHash)
             os.system(namePublishCmd)
