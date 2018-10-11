@@ -68,7 +68,7 @@ def createLocalRepository(repoInfo, userInfo):
     os.chdir(cwd)
 
     cloneRepoPath = dirPath + "_clone"
-    os.system("git clone %s %s" % (dirPath, cloneRepoPath))
+    os.system("git clone --bare %s %s" % (dirPath, cloneRepoPath))
     os.chdir(cloneRepoPath)
     os.system("git update-server-info")
     os.chdir(cwd)
