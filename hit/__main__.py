@@ -289,6 +289,30 @@ def main():
             cmd += " " + arg
         os.system(cmd)
 
+    elif args[0] == "clone":
+        for i,arg in enumerate(args):
+            if arg[0:26] == "http://47.105.76.115:8000/" or arg[0:19] == "47.105.76.115:8000/":
+                argsplit = arg.split("/")
+                ownername = argsplit[-2]
+                reponame = argsplit[-1].split(".")[-2]
+                ipfsHashData = json.dumps(
+                    {"method": "getIpfsHash", "ownername": ownername, "reponame": reponame})
+                response = requests.post("http://47.105.76.115:8000/webservice/", data=ipfsHashData).json()
+                if response["response"] == "success":
+                    remoteIpfsHash = response["ipfs_hash"]
+                    remoteIpfsUrl = "http://localhost:8080/ipfs/" + remoteIpfsHash
+                    args[i] = remoteIpfsUrl
+                    print args[i]
+                    break
+                else:
+                    print response["response"]
+                    return
+
+        cmd = "git"
+        for arg in args:
+            cmd += " " + arg
+        os.system(cmd)
+
     else:
         cmd = "git"
         for arg in args:
