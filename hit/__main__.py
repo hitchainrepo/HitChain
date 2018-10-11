@@ -306,7 +306,9 @@ def main():
                     remoteIpfsHash = response["ipfs_hash"]
                     remoteIpfsUrl = "http://localhost:8080/ipfs/" + remoteIpfsHash
                     args[i] = remoteIpfsUrl
-                    print args[i]
+                    print "hit clone ipfs hash: " + args[i]
+                    if len(args) <= i + 2:
+                        args.append(reponame)
                     break
                 else:
                     print response["response"]
