@@ -113,9 +113,10 @@ def main():
             repoNameBack = genKey32()
             os.system("git clone %s %s"%(args[1],repoNameBack))
             os.chdir(repoNameBack)
-            username = args[2]
-            password = args[3]
-            newRepoName = args[4]
+
+            username = input("user name: ")
+            password = getpass.getpass('password: ')
+            newRepoName = input("repository name: ")
 
             config = Config()
             config.initConfig(newRepoName, username)
