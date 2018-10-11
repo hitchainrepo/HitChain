@@ -318,6 +318,24 @@ def main():
         for arg in args:
             cmd += " " + arg
         os.system(cmd)
+    elif args[0] == "commit":
+        # print args
+        for i,arg in enumerate(args):
+            if arg[0:2] == "-m":
+                if len(arg) > 2:
+                    args[i] = "-m"
+                    args.insert(i+1,"\""+ arg[2:len(arg)] +"\"")
+                    break
+                elif arg == "-m" and len(args) > i+1:
+                    temparg = "\"" + args[i + 1] + "\""
+                    args[i + 1] = temparg
+                    break
+        cmd = "git"
+        # print args
+        for arg in args:
+            cmd += " " + arg
+        os.system(cmd)
+
 
     else:
         cmd = "git"
