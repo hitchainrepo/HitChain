@@ -47,9 +47,6 @@ def createLocalRepository(repoInfo, userInfo):
     os.makedirs(dirPath)
 
     os.system("git init %s" % (dirPath)) # git init the path
-    # file = open(os.path.join(dirPath + "README.md"),'w')
-    # file.write("This is the readme file")
-    # file.close()
 
     hitPath = os.path.join(dirPath, ".hit")
 
@@ -62,16 +59,27 @@ def createLocalRepository(repoInfo, userInfo):
     cf.set("remote \"origin\"", "userName", username)
     with open(configPath, "w+") as f:
         cf.write(f)
-    return dirPath
+
+    os.chdir(dirPath)
+    os.system("git add .")
+    os.system("git commit -m 'hit init'")
+
+    cloneRepoPath = dirPath + "_clone"
+    os.system("git clone %s %s" % (dirPath, cloneRepoPath))
+    os.chdir(cloneRepoPath)
+    os.system("git update-server-info")
+
+    return dirPath, cloneRepoPath
 
 # return IpfsHash if added completely
 # else return None
 def createIpfsRepository(repoInfo, userInfo):
-    repoPath = createLocalRepository(repoInfo, userInfo)
-    addResponse = os.popen("ipfs add -rH " + repoPath).read()
+    repoPath, cloneRepoPath = createLocalRepository(repoInfo, userInfo)
+    addResponse = os.popen("ipfs add -rH " + cloneRepoPath).read()
     lastline = addResponse.splitlines()[-1].lower()
     if lastline != "added completely!":
         return None
     newRepoHash = addResponse.splitlines()[-2].split(" ")[1]
     shutil.rmtree(repoPath) # after added to ipfs net, remove the local repo
+    shutil.rmtree(cloneRepoPath)
     return newRepoHash
