@@ -176,8 +176,8 @@
                 <form class="form" action="{% url 'addAuth' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                  {% csrf_token %}
                   <div class="form-group">
-                    <label for="username">昵称</label>
-                    <input type="text" class="form-control" name="username" id="keyword" placeholder="请输入昵称"
+                    <label for="username">nickname</label>
+                    <input type="text" class="form-control" name="username" id="keyword" placeholder="input nickname"
                                 onkeyup="getMoreContents()" onblur="keywordBlur()" onfocus="keywordFocus()" />
                   </div>
                     <input type="text" name="repoId" id="repoId" value="{{ repoId }}" hidden="hidden" />
@@ -189,7 +189,7 @@
                             </tbody>
                         </table>
                     </div>
-                  <button type="submit" class="btn btn-default">立即添加</button>
+                  <button type="submit" class="btn btn-default">add</button>
                 </form>
 
             </div>
