@@ -173,6 +173,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
+
+                {% if context.userExist == False %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span>&times;</span>
+                        </button>
+                        the user doesn't exist
+                    </div>
+                {% elif context.authorityExist == True %}
+                    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span>&times;</span>
+                        </button>
+                        the user has already been a core developer
+                    </div>
+                {% endif %}
+
                 <form class="form" action="{% url 'addAuth' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                  {% csrf_token %}
                   <div class="form-group">

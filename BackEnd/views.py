@@ -171,17 +171,33 @@ def showAuth(request):
 
 def addAuth(request):
     if request.method == 'POST':
+        context = {}
         username = request.POST.get('username')
         repoId = request.POST.get('repoId')
 
-        authItem = Authority()
-        authItem.username = username
-        authItem.repo_id = repoId
-        authItem.create_time = getCurrentTime()
-        authItem.user_type = "core"
-        Authority.save(authItem)
+        # judge whether username right
+        userExist = User.objects.filter(username=username)
+        if userExist:
 
-        return redirect("/showAuth?repoId=" + repoId)
+            # judge whether user already core developers or owner
+            authorityExist = Authority.objects.filter(username=username, repo_id=repoId)
+            if authorityExist:
+                context["authorityExist"] = True
+                return render(request, "addAuth.html", locals())
+
+            authItem = Authority()
+            authItem.username = username
+            authItem.repo_id = repoId
+            authItem.create_time = getCurrentTime()
+            authItem.user_type = "core"
+            Authority.save(authItem)
+
+            return redirect("/showAuth?repoId=" + repoId)
+        else:
+            # user does not exist
+            context["userExist"] = False
+            return render(request, "addAuth.html", locals())
+
     else:
         repoId = request.GET.get("repoId")
     return render(request, 'addAuth.html', locals())
