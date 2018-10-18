@@ -47,9 +47,10 @@ def register_view(request):
         password = request.POST.get("password")
 
         # 判断用户是否存在
-        user = auth.authenticate(username = username,password = password)
+        user = User.objects.filter(username=username)
+        # user = auth.authenticate(username = username,password = password)
         if user:
-            context['userExit']=True
+            context['userExist']=True
             return render(request, 'register.html', context)
 
 
@@ -85,10 +86,10 @@ def login_view(request):
             return redirect("/")
         else:
             #比较失败，还在login
-            context = {'isLogin': False,'pawd':False}
+            context = {'isLogin': False, 'password':False}
             return render(request, 'login.html', context)
     else:
-        context = {'isLogin': False,'pswd':True}
+        context = {'isLogin': False, 'password':True}
     return render(request, 'login.html', context)
 
 #登出
