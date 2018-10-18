@@ -102,14 +102,24 @@ def logout_view(request):
 @csrf_exempt
 def newRepo(request):
     if request.method == 'POST':
+        context = {}
         username = request.POST.get('username')
         reponame = request.POST.get('reponame')
 
         repoInfo = {"reponame":reponame}
         userInfo = {"username":username}
+
+        # judge whether the repo already existed
+        repoAlready = Repo.objects.filter(username=username, reponame=reponame)
+        if repoAlready:
+            context["repoExist"] = True
+            return render(request, 'new.html', context)
+
         newIpfsHash = createIpfsRepository(repoInfo, userInfo)
         if newIpfsHash == None:
-            return JsonResponse(data={"result": "new repository error"}, status=status.HTTP_400_BAD_REQUEST)
+            # return JsonResponse(data={"result": "new repository error"}, status=status.HTTP_400_BAD_REQUEST)
+            context["newRepoError"] = True
+            return render(request, "new.html", context)
 
         repoItem = Repo()
         repoItem.username = username
