@@ -10,6 +10,7 @@ from BackEnd.models import *
 from BackEnd.utils import *
 
 import json
+import re
 
 from django.http import HttpResponseNotAllowed
 from rest_framework.parsers import JSONParser
@@ -46,7 +47,21 @@ def register_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        # 判断用户是否存在
+        # judge whether enter username
+        if username is None or username == "" or password is None or password == "":
+            context['empty'] = True
+            return render(request, 'register.html', context)
+
+        # judge whether there exists special characters
+        specialToken = re.match(r'[^a-zA-Z0-9\-]+$', username)
+        if specialToken:
+            context['specialToken'] = True
+            return render(request, 'register.html', context)
+        if username.startswith("-") or username.endswith("-"):
+            context['specialToken'] = True
+            return render(request, 'register.html', context)
+
+        # judge whether the user exists
         user = User.objects.filter(username=username)
         # user = auth.authenticate(username = username,password = password)
         if user:

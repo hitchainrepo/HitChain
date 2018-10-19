@@ -20,6 +20,20 @@
                         </button>
                         nickname already exists
                     </div>
+                {% elif specialToken == True %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span>&times;</span>
+                        </button>
+                        nickname may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen
+                    </div>
+                {% elif empty == True %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span>&times;</span>
+                        </button>
+                        please enter nickname and password
+                    </div>
                 {% endif %}
 
                 <form action="{% url 'register' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
