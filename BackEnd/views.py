@@ -52,6 +52,10 @@ def register_view(request):
             context['empty'] = True
             return render(request, 'register.html', context)
 
+        if len(username) > 39:
+            context['long'] = True
+            return render(request, 'register.html', context)
+
         # judge whether there exists special characters
         specialToken = re.match(r'[^a-zA-Z0-9\-]+$', username)
         if specialToken:

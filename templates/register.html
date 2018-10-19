@@ -34,6 +34,13 @@
                         </button>
                         please enter nickname and password
                     </div>
+                {% elif long == True %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span>&times;</span>
+                        </button>
+                        nickname is too long (maximum is 39 characters)
+                    </div>
                 {% endif %}
 
                 <form action="{% url 'register' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
