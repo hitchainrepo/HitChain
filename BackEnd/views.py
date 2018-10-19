@@ -128,6 +128,23 @@ def newRepo(request):
         repoInfo = {"reponame":reponame}
         userInfo = {"username":username}
 
+
+        # judge whether enter username and reponame
+        if reponame is None or reponame == "":
+            context['empty'] = True
+            return render(request, 'new.html', context)
+
+        if len(reponame) > 39:
+            context['long'] = True
+            return render(request, 'new.html', context)
+
+        # judge whether there exists special characters
+        specialToken = re.match(r'[^a-zA-Z0-9\-]+$', reponame)
+        if specialToken:
+            context['specialToken'] = True
+            return render(request, 'new.html', context)
+
+
         # judge whether the repo already existed
         repoAlready = Repo.objects.filter(username=username, reponame=reponame)
         if repoAlready:
