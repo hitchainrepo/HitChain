@@ -57,8 +57,8 @@ def register_view(request):
             return render(request, 'register.html', context)
 
         # judge whether there exists special characters
-        specialToken = re.match(r'[^a-zA-Z0-9\-]+', username)
-        if specialToken:
+        specialToken = re.findall(r'[^a-zA-Z0-9\-]', username)
+        if len(specialToken) > 0:
             context['specialToken'] = True
             return render(request, 'register.html', context)
         if username.startswith("-") or username.endswith("-"):
@@ -139,8 +139,8 @@ def newRepo(request):
             return render(request, 'new.html', context)
 
         # judge whether there exists special characters
-        specialToken = re.match(r'[^a-zA-Z0-9\-]+', reponame)
-        if specialToken:
+        specialToken = re.findall(r'[^a-zA-Z0-9\-]', reponame)
+        if len(specialToken) > 0:
             context['specialToken'] = True
             return render(request, 'new.html', context)
 
